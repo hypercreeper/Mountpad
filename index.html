@@ -114,7 +114,7 @@ let data = document.getElementById("divy").innerHTML;
     }
 </script>
 <div contenteditable="false">
-<button" title="Bold" value="" onclick="b()"><img src="https://hypercreeper.github.io/notepad/bold.png"></button>
+<button title="Bold" value="B onclick="b()"><img src="https://hypercreeper.github.io/notepad/bold.png"></button>
 <button title="Underline" value="U" onclick="u()"><img src="https://hypercreeper.github.io/notepad/underline.png"></button>
 <button title="Italic" value="I" onclick="i()"><img src="https://hypercreeper.github.io/notepad/italic.png"></button>
 <button title="Strikethrough" value="S" onclick="s()"><img src="https://hypercreeper.github.io/notepad/strikethrough.png"></button>
@@ -124,11 +124,13 @@ let data = document.getElementById("divy").innerHTML;
 <button title="Undo" value="<-" onclick="un()"><img src="https://hypercreeper.github.io/notepad/undo.png"></button>
 <button title="Redo" value="->" onclick="re()"><img src="https://hypercreeper.github.io/notepad/redo.png"></button>
 <button title="Insert image" value="Im" onclick="ii()"><img src="https://hypercreeper.github.io/notepad/insert_pic.png"></button>
-<input type="color" title="Choose Text Color" value="#000000" onchange="ct(event)">
-<input type="color" title="Choose Highlight Color" value="#ffffff" onchange="ch(event)">
+<button type="color" title="Choose Text Color" onclick="document.getElementById('tc').click();"><img src="https://hypercreeper.github.io/notepad/text_color.png"></button>
+<input type="color" title="Choose Text Color" value="#000000" id="tc" onchange="ct(event)" hidden>
+<button type="color" title="Choose Highlight Color" onclick="document.getElementById('tc').click();"><img src="https://hypercreeper.github.io/notepad/bg_color.png"></button>
+<input type="color" title="Choose Highlight Color" value="#ffffff" id="hc" onchange="ch(event)" hidden>
 <button title="Font name" value="F" onclick="fn()"><img src="https://hypercreeper.github.io/notepad/font.png"></button>
 <button title="Insert HTML" value="</>" onclick="inhtml()"><img src="https://hypercreeper.github.io/notepad/code.png"></button>
-<button title="Clear Formatting" value="C" onclick="cl(event)" style="background-color: red;">
+<button title="Clear Formatting" value="C" onclick="cl(event)" style="background-color: red;"><img src="https://hypercreeper.github.io/notepad/clear.png"></button>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" title="Print" value="Print" onclick="printDiv('divy')"><input id="tf" placeholder="enter file name here"><input type="button" value="save" onclick="savetext()" title="Save File">
 
 </div>
