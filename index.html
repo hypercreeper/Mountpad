@@ -112,6 +112,14 @@ let data = document.getElementById("divy").innerHTML;
 
         newLink.click(); 
     }
+	function openfile(file) {
+	const reader = new FileReader();
+reader.onload = event => document.getElementById("divy").innerHTML = event.target.result; // desired file content
+reader.onerror = error => reject(error);
+document.getElementById("divy").innerHTML = reader.readAsText(file); // you could also read images and other binaries
+document.getElementById("divy").focus();
+document.getElementById("tf").value = document.getElementById("divy").files[0].name;
+}
 </script>
 <div contenteditable="false">
 <button title="Bold" value="B" onclick="b()"><img src="https://hypercreeper.github.io/notepad/bold.png"></button>
@@ -131,7 +139,7 @@ let data = document.getElementById("divy").innerHTML;
 <button title="Font name" value="F" onclick="fn()"><img src="https://hypercreeper.github.io/notepad/font.png"></button>
 <button title="Insert HTML" value="</>" onclick="inhtml()"><img src="https://hypercreeper.github.io/notepad/code.png"></button>
 <button title="Clear Formatting" value="C" onclick="cl(event)" style="background-color: red;"><img src="https://hypercreeper.github.io/notepad/clear.png"></button>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button title="Print" value="Print" onclick="printDiv('divy')"><img src="https://raw.githubusercontent.com/hypercreeper/notepad/main/print.png"></button><input id="tf" placeholder="enter file name here"><button value="save" onclick="savetext()" title="Save File"><img src="https://raw.githubusercontent.com/hypercreeper/notepad/main/save.png"></button>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button title="Print" value="Print" onclick="printDiv('divy')"><img src="https://raw.githubusercontent.com/hypercreeper/notepad/main/print.png"></button><input id="tf" placeholder="enter file name here"><button value="save" onclick="savetext()" title="Save File"><img src="https://raw.githubusercontent.com/hypercreeper/notepad/main/save.png"></button><input type="file" id="ff" onchange="openfile(document.getElementById('ff').files[0])" hidden><button value="open" onclick="document.getElementById('ff').click();" title="Open File"><img src="https://raw.githubusercontent.com/hypercreeper/notepad/main/open.png"></button>
 
 </div>
 <style>
