@@ -118,7 +118,7 @@ reader.onload = event => document.getElementById("divy").innerHTML = event.targe
 reader.onerror = error => reject(error);
 document.getElementById("divy").innerHTML = reader.readAsText(file); // you could also read images and other binaries
 document.getElementById("divy").focus();
-document.getElementById("tf").value = document.getElementById("divy").files[0].name;
+document.getElementById("tf").value = document.getElementById("ff").files[0].name.replace('.html','');;
 }
 </script>
 <div contenteditable="false">
