@@ -121,7 +121,7 @@ document.getElementById("divy").focus();
 document.getElementById("tf").value = document.getElementById("ff").files[0].name.replace('.mdocx','');;
 }
 </script>
-<div contenteditable="false">
+<div contenteditable="false" style="position: fixed; top: 1%; background-color: white; padding-top: 10px; padding-left: 10px; padding-right: 10px; padding-bottom: 10px; box-shadow: 0px 10px 20px gray;">
 <button title="Bold" value="B" onclick="b()"><img src="https://hypercreeper.github.io/notepad/bold.png"></button>
 <button title="Underline" value="U" onclick="u()"><img src="https://hypercreeper.github.io/notepad/underline.png"></button>
 <button title="Italic" value="I" onclick="i()"><img src="https://hypercreeper.github.io/notepad/italic.png"></button>
@@ -150,9 +150,12 @@ border-style: outset;
 input:active {
 border-style: inset;
 }
+#divy:focus {
+height: auto;
+}
 </style>
 <br>
-<div id="divy" contenteditable="true" autofocus style="outline: none; height: 90%; width: 100%; border-color: black; border-width: 2px; border-style: dotted;">
+<div id="divy" contenteditable="true" autofocus style="outline: none; width: 100%; border-color: black; border-width: 2px; border-style: dotted;">
 
 </div>
 </body>
