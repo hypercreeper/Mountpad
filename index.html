@@ -95,8 +95,8 @@ function savetext() {
 let data = document.getElementById("divy").innerHTML;
         
         // Convert the text to BLOB.
-        const textToBLOB = new Blob([data], { type: 'text/rtf' });
-        const sFileName = document.getElementById("tf").value + '.html';	   // The file to save the data.
+        const textToBLOB = new Blob([data], { type: 'text/mdocx' });
+        const sFileName = document.getElementById("tf").value + '.mdocx';	   // The file to save the data.
 
         let newLink = document.createElement("a");
         newLink.download = sFileName;
@@ -118,7 +118,7 @@ reader.onload = event => document.getElementById("divy").innerHTML = event.targe
 reader.onerror = error => reject(error);
 document.getElementById("divy").innerHTML = reader.readAsText(file); // you could also read images and other binaries
 document.getElementById("divy").focus();
-document.getElementById("tf").value = document.getElementById("ff").files[0].name.replace('.html','');;
+document.getElementById("tf").value = document.getElementById("ff").files[0].name.replace('.mdocx','');;
 }
 </script>
 <div contenteditable="false">
@@ -134,12 +134,12 @@ document.getElementById("tf").value = document.getElementById("ff").files[0].nam
 <button title="Insert image" value="Im" onclick="ii()"><img src="https://hypercreeper.github.io/notepad/insert_pic.png"></button>
 <button type="color" title="Choose Text Color" onclick="document.getElementById('tc').click();"><img src="https://hypercreeper.github.io/notepad/text_color.png"></button>
 <input type="color" title="Choose Text Color" value="#000000" id="tc" onchange="ct(event)" hidden>
-<button type="color" title="Choose Highlight Color" onclick="document.getElementById('tc').click();"><img src="https://hypercreeper.github.io/notepad/bg_color.png"></button>
+<button type="color" title="Choose Highlight Color" onclick="document.getElementById('hc').click();"><img src="https://hypercreeper.github.io/notepad/bg_color.png"></button>
 <input type="color" title="Choose Highlight Color" value="#ffffff" id="hc" onchange="ch(event)" hidden>
 <button title="Font name" value="F" onclick="fn()"><img src="https://hypercreeper.github.io/notepad/font.png"></button>
 <button title="Insert HTML" value="</>" onclick="inhtml()"><img src="https://hypercreeper.github.io/notepad/code.png"></button>
 <button title="Clear Formatting" value="C" onclick="cl(event)" style="background-color: red;"><img src="https://hypercreeper.github.io/notepad/clear.png"></button>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button title="Print" value="Print" onclick="printDiv('divy')"><img src="https://raw.githubusercontent.com/hypercreeper/notepad/main/print.png"></button><input id="tf" placeholder="enter file name here"><button value="save" onclick="savetext()" title="Save File"><img src="https://raw.githubusercontent.com/hypercreeper/notepad/main/save.png"></button><input type="file" id="ff" onchange="openfile(document.getElementById('ff').files[0])" hidden><button value="open" onclick="document.getElementById('ff').click();" title="Open File"><img src="https://raw.githubusercontent.com/hypercreeper/notepad/main/open.png"></button>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button title="Print" value="Print" onclick="printDiv('divy')"><img src="https://raw.githubusercontent.com/hypercreeper/notepad/main/print.png"></button><input id="tf" placeholder="enter file name here"><button value="save" onclick="savetext()" title="Save File"><img src="https://raw.githubusercontent.com/hypercreeper/notepad/main/save.png"></button><input type="file" id="ff" onchange="openfile(document.getElementById('ff').files[0])" accept=".mdocx" hidden><button value="open" onclick="document.getElementById('ff').click();" title="Open File"><img src="https://raw.githubusercontent.com/hypercreeper/notepad/main/open.png"></button>
 
 </div>
 <style>
