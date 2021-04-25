@@ -7,35 +7,35 @@
 <script>
 function b() {
 document.execCommand("bold");
-document.getElementsByTagName('div')[1].focus();
+document.getElementsByTagName('div')[3].focus();
 }
 function u() {
 document.execCommand("underline");
-document.getElementsByTagName('div')[1].focus();
+document.getElementsByTagName('div')[3].focus();
 }
 function i() {
 document.execCommand("italic");
-document.getElementsByTagName('div')[1].focus();
+document.getElementsByTagName('div')[3].focus();
 }
 function s() {
 document.execCommand("strikeThrough");
-document.getElementsByTagName('div')[1].focus();
+document.getElementsByTagName('div')[3].focus();
 }
 var fontsize = 3;
 function sm() {
 fontsize--;
 document.execCommand("fontSize", false, fontsize);
-document.getElementsByTagName('div')[1].focus();
+document.getElementsByTagName('div')[3].focus();
 }
 function si() {
 var sizee = prompt("Enter a size from 1-7");
 document.execCommand("fontSize", false, sizee);
-document.getElementsByTagName('div')[1].focus();
+document.getElementsByTagName('div')[3].focus();
 }
 function sp() {
 fontsize++;
 document.execCommand("fontSize", false, fontsize);
-document.getElementsByTagName('div')[1].focus();
+document.getElementsByTagName('div')[3].focus();
 }
 function checknow() {
 if(fontsize > 7) {
@@ -48,38 +48,58 @@ fontsize++;
 setInterval(checknow, 10);
 function un() {
 document.execCommand("undo");
-document.getElementsByTagName('div')[1].focus();
+document.getElementsByTagName('div')[3].focus();
 }
 function re() {
 document.execCommand("redo");
-document.getElementsByTagName('div')[1].focus();
+document.getElementsByTagName('div')[3].focus();
 }
 function ii() {
 var link = prompt("Enter an image link");
 document.execCommand("insertImage", false, link);
-document.getElementsByTagName('div')[1].focus();
+document.getElementsByTagName('div')[3].focus();
 }
+var col = "";
 function ct(ev) {
-document.execCommand("foreColor", false, ev.target.value);
-document.getElementsByTagName('div')[1].focus();
+document.execCommand("foreColor", false, col);
+document.getElementsByTagName('div')[3].focus();
 }
+function tc(ev) {
+col = ev.target.value;
+document.execCommand("foreColor", false, ev.target.value);
+document.getElementsByTagName('div')[3].focus();
+}
+function bp() {
+document.execCommand("insertUnorderedList")
+document.getElementsByTagName('div')[3].focus();
+}
+function nbp() {
+document.execCommand("insertOrderedList");
+document.getElementsByTagName('div')[3].focus();
+}
+var hcol = "";
 function ch(ev) {
+document.execCommand("hiliteColor", false, hcol);
+document.getElementsByTagName('div')[3].focus();
+}
+function thc(ev) {
+hcol = ev.target.value;
 document.execCommand("hiliteColor", false, ev.target.value);
-document.getElementsByTagName('div')[1].focus();
+document.getElementsByTagName('div')[3].focus();
 }
 function fn() {
 var link = prompt("Enter a font name");
 document.execCommand("fontName", false, link);
-document.getElementsByTagName('div')[1].focus();
+document.getElementsByTagName('div')[3].focus();
 }
 function cl(ev) {
 document.execCommand("removeFormat");
-document.getElementsByTagName('div')[1].focus();
+document.getElementsByTagName('div')[3].focus();
 }
 function inhtml() {
 var page = prompt("Enter an HTML script");
 document.execCommand("insertHTML", false, page);
-document.getElementsByTagName('div')[1].focus();
+document.getElementsByTagName('div')[3].focus();
 }
 function printDiv(idd) { 
             var divContents = document.getElementById(idd).innerHTML; 
@@ -126,16 +146,23 @@ document.getElementById("tf").value = document.getElementById("ff").files[0].nam
 <button title="Underline" value="U" onclick="u()"><img src="https://hypercreeper.github.io/notepad/underline.png"></button>
 <button title="Italic" value="I" onclick="i()"><img src="https://hypercreeper.github.io/notepad/italic.png"></button>
 <button title="Strikethrough" value="S" onclick="s()"><img src="https://hypercreeper.github.io/notepad/strikethrough.png"></button>
-<button title="font Size" value="A-" onclick="sm()"><img src="https://hypercreeper.github.io/notepad/font_down.png"></button>
+<button title="Decrease font Size" value="A-" onclick="sm()"><img src="https://hypercreeper.github.io/notepad/font_down.png"></button>
 <button title="font Size" value="A" onclick="si()"><img src="https://hypercreeper.github.io/notepad/font_size.png"></button>
-<button title="font Size" value="A+" onclick="sp()"><img src="https://hypercreeper.github.io/notepad/font_up.png"></button>
+<button title="Increase font Size" value="A+" onclick="sp()"><img src="https://hypercreeper.github.io/notepad/font_up.png"></button>
+<button title="Bullet Point" value="* " onclick="bp()"><img src="https://raw.githubusercontent.com/hypercreeper/notepad/main/bullets.png"></button>
+<button title="Number Bullet Point" value="1." onclick="nbp()"><img src="https://raw.githubusercontent.com/hypercreeper/notepad/main/number_bullets.png"></button>
 <button title="Undo" value="<-" onclick="un()"><img src="https://hypercreeper.github.io/notepad/undo.png"></button>
 <button title="Redo" value="->" onclick="re()"><img src="https://hypercreeper.github.io/notepad/redo.png"></button>
 <button title="Insert image" value="Im" onclick="ii()"><img src="https://hypercreeper.github.io/notepad/insert_pic.png"></button>
-<button type="color" title="Choose Text Color" onclick="document.getElementById('tc').click();"><img src="https://hypercreeper.github.io/notepad/text_color.png"></button>
-<input type="color" title="Choose Text Color" value="#000000" id="tc" onchange="ct(event)" hidden>
-<button type="color" title="Choose Highlight Color" onclick="document.getElementById('hc').click();"><img src="https://hypercreeper.github.io/notepad/bg_color.png"></button>
-<input type="color" title="Choose Highlight Color" value="#ffffff" id="hc" onchange="ch(event)" hidden>
+
+<button type="color" title="Choose Text Color" onclick="ct()"><img src="https://hypercreeper.github.io/notepad/text_color.png"></button>
+<button title="choose Color" value="* " onclick="document.getElementById('tc').click();" style="padding-top: 7px;"><img src="https://raw.githubusercontent.com/hypercreeper/notepad/main/dropdown.png"></button>
+<input type="color" title="Choose Text Color" value="#000000" id="tc" onchange="tc(event)" hidden>
+
+<button type="color" title="Choose Highlight Color" onclick="ch(event)"><img src="https://hypercreeper.github.io/notepad/bg_color.png"></button>
+<button title="choose Color" value="* " onclick="document.getElementById('hc').click();" style="padding-top: 7px;"><img src="https://raw.githubusercontent.com/hypercreeper/notepad/main/dropdown.png"></button>
+<input type="color" title="Choose Highlight Color" value="#ffffff" id="hc" onchange="thc(event)" hidden>
+
 <button title="Font name" value="F" onclick="fn()"><img src="https://hypercreeper.github.io/notepad/font.png"></button>
 <button title="Insert HTML" value="</>" onclick="inhtml()"><img src="https://hypercreeper.github.io/notepad/code.png"></button>
 <button title="Clear Formatting" value="C" onclick="cl(event)" style="background-color: red;"><img src="https://hypercreeper.github.io/notepad/clear.png"></button>
