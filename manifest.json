@@ -1,0 +1,16 @@
+{
+	"name": "Mountpad Editor",
+	"short_name": "Mountpad",
+	"description": "A free and open-source notepad loaded with all the most essential features required in a rich-text editor. ",
+	"icons": [
+		{
+			"src": "https://raw.githubusercontent.com/hypercreeper/notepad/main/icon.png",
+			"sizes": "512x512",
+			"type": "image/png"
+		}
+	],
+	"start_url": "https://hypercreeper.github.io/notepad",
+	"display": "fullscreen",
+	"theme_color": "#ccc",
+	"background_color": "white"
+}
