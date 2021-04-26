@@ -54,6 +54,22 @@ function re() {
 document.execCommand("redo");
 document.getElementsByTagName('div')[3].focus();
 }
+function jl() {
+document.execCommand("justifyLeft");
+document.getElementsByTagName('div')[3].focus();
+}
+function jc() {
+document.execCommand("justifyCenter");
+document.getElementsByTagName('div')[3].focus();
+}
+function jf() {
+document.execCommand("justifyFull");
+document.getElementsByTagName('div')[3].focus();
+}
+function jr() {
+document.execCommand("justifyRight");
+document.getElementsByTagName('div')[3].focus();
+}
 function ii() {
 var link = prompt("Enter an image link");
 document.execCommand("insertImage", false, link);
@@ -145,6 +161,11 @@ document.getElementById("tf").value = document.getElementById("ff").files[0].nam
 <button title="Bold" value="B" onclick="b()"><img src="https://hypercreeper.github.io/notepad/bold.png"></button>
 <button title="Underline" value="U" onclick="u()"><img src="https://hypercreeper.github.io/notepad/underline.png"></button>
 <button title="Italic" value="I" onclick="i()"><img src="https://hypercreeper.github.io/notepad/italic.png"></button>
+<button title="Redo" value="->" onclick="re()"><img src="https://hypercreeper.github.io/notepad/redo.png"></button>
+<button title="Justify Left" value="" onclick="jl()"><img src="https://raw.githubusercontent.com/hypercreeper/notepad/main/left.png"></button>
+<button title="Justify Center" value="" onclick="jc()"><img src="https://raw.githubusercontent.com/hypercreeper/notepad/main/center.png"></button>
+<button title="Justify Full" value="" onclick="jf()"><img src="https://raw.githubusercontent.com/hypercreeper/notepad/main/full.png"></button>
+<button title="Justify Right" value="" onclick="jr()"><img src="https://raw.githubusercontent.com/hypercreeper/notepad/main/right.png"></button>
 <button title="Strikethrough" value="S" onclick="s()"><img src="https://hypercreeper.github.io/notepad/strikethrough.png"></button>
 <button title="Decrease font Size" value="A-" onclick="sm()"><img src="https://hypercreeper.github.io/notepad/font_down.png"></button>
 <button title="font Size" value="A" onclick="si()"><img src="https://hypercreeper.github.io/notepad/font_size.png"></button>
@@ -182,7 +203,7 @@ height: auto;
 }
 </style>
 <br>
-<div id="divy" contenteditable="true" autofocus style="outline: none; width: 100%; margin-top: 20px; border-color: black; border-width: 2px; border-style: dotted;">
+<div id="divy" contenteditable="true" autofocus style="outline: none; width: 100%; margin-top: 35px; border-color: black; border-width: 2px; border-style: dotted;">
 
 </div>
 </body>
