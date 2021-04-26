@@ -1,6 +1,7 @@
 <html>
 <head style="outline: none;">
 <title>Notepad</title>
+<meta ref="manifest" href="https://raw.githubusercontent.com/hypercreeper/notepad/main/manifest.json">
 </head>
 <br><br>
 <body>
@@ -156,6 +157,38 @@ document.getElementById("divy").innerHTML = reader.readAsText(file); // you coul
 document.getElementById("divy").focus();
 document.getElementById("tf").value = document.getElementById("ff").files[0].name.replace('.mdocx','');;
 }
+</script>
+<script>
+window.addEventListener('beforeinstallprompt', (event) => {
+  console.log('👍', 'beforeinstallprompt', event);
+  // Stash the event so it can be triggered later.
+  window.deferredPrompt = event;
+  // Remove the 'hidden' class from the install button container
+  divInstall.classList.toggle('hidden', false);
+});
+butInstall.addEventListener('click', async () => {
+  console.log('👍', 'butInstall-clicked');
+  const promptEvent = window.deferredPrompt;
+  if (!promptEvent) {
+    // The deferred prompt isn't available.
+    return;
+  }
+  // Show the install prompt.
+  promptEvent.prompt();
+  // Log the result
+  const result = await promptEvent.userChoice;
+  console.log('👍', 'userChoice', result);
+  // Reset the deferred prompt variable, since
+  // prompt() can only be called once.
+  window.deferredPrompt = null;
+  // Hide the install button.
+  divInstall.classList.toggle('hidden', true);
+});
+window.addEventListener('appinstalled', (event) => {
+  console.log('👍', 'appinstalled', event);
+  // Clear the deferredPrompt so it can be garbage collected
+  window.deferredPrompt = null;
+});
 </script>
 <div contenteditable="false" style="position: fixed; top: 1%; background-color: white; padding-top: 10px; padding-left: 10px; padding-right: 10px; padding-bottom: 10px; box-shadow: 0px 10px 20px gray;">
 <button title="Bold" value="B" onclick="b()"><img src="https://hypercreeper.github.io/notepad/bold.png"></button>
