@@ -8,35 +8,35 @@
 <script>
 function b() {
 document.execCommand("bold");
-document.getElementsByTagName('div')[0].focus();
+document.getElementsByTagName('div')[1].focus();
 }
 function u() {
 document.execCommand("underline");
-document.getElementsByTagName('div')[0].focus();
+document.getElementsByTagName('div')[1].focus();
 }
 function i() {
 document.execCommand("italic");
-document.getElementsByTagName('div')[0].focus();
+document.getElementsByTagName('div')[1].focus();
 }
 function s() {
 document.execCommand("strikeThrough");
-document.getElementsByTagName('div')[0].focus();
+document.getElementsByTagName('div')[1].focus();
 }
 var fontsize = 3;
 function sm() {
 fontsize--;
 document.execCommand("fontSize", false, fontsize);
-document.getElementsByTagName('div')[0].focus();
+document.getElementsByTagName('div')[1].focus();
 }
 function si() {
 var sizee = prompt("Enter a size from 1-7");
 document.execCommand("fontSize", false, sizee);
-document.getElementsByTagName('div')[0].focus();
+document.getElementsByTagName('div')[1].focus();
 }
 function sp() {
 fontsize++;
 document.execCommand("fontSize", false, fontsize);
-document.getElementsByTagName('div')[0].focus();
+document.getElementsByTagName('div')[1].focus();
 }
 function checknow() {
 if(fontsize > 7) {
@@ -49,74 +49,74 @@ fontsize++;
 setInterval(checknow, 10);
 function un() {
 document.execCommand("undo");
-document.getElementsByTagName('div')[0].focus();
+document.getElementsByTagName('div')[1].focus();
 }
 function re() {
 document.execCommand("redo");
-document.getElementsByTagName('div')[0].focus();
+document.getElementsByTagName('div')[1].focus();
 }
 function jl() {
 document.execCommand("justifyLeft");
-document.getElementsByTagName('div')[0].focus();
+document.getElementsByTagName('div')[1].focus();
 }
 function jc() {
 document.execCommand("justifyCenter");
-document.getElementsByTagName('div')[0].focus();
+document.getElementsByTagName('div')[1].focus();
 }
 function jf() {
 document.execCommand("justifyFull");
-document.getElementsByTagName('div')[0].focus();
+document.getElementsByTagName('div')[1].focus();
 }
 function jr() {
 document.execCommand("justifyRight");
-document.getElementsByTagName('div')[0].focus();
+document.getElementsByTagName('div')[1].focus();
 }
 function ii() {
 var link = prompt("Enter an image link");
 document.execCommand("insertImage", false, link);
-document.getElementsByTagName('div')[0].focus();
+document.getElementsByTagName('div')[1].focus();
 }
 var col = "";
 function ct(ev) {
 document.execCommand("foreColor", false, col);
-document.getElementsByTagName('div')[0].focus();
+document.getElementsByTagName('div')[1].focus();
 }
 function tc(ev) {
 col = ev.target.value;
 document.execCommand("foreColor", false, ev.target.value);
-document.getElementsByTagName('div')[0].focus();
+document.getElementsByTagName('div')[1].focus();
 }
 function bp() {
 document.execCommand("insertUnorderedList")
-document.getElementsByTagName('div')[0].focus();
+document.getElementsByTagName('div')[1].focus();
 }
 function nbp() {
 document.execCommand("insertOrderedList");
-document.getElementsByTagName('div')[0].focus();
+document.getElementsByTagName('div')[1].focus();
 }
 var hcol = "";
 function ch(ev) {
 document.execCommand("hiliteColor", false, hcol);
-document.getElementsByTagName('div')[0].focus();
+document.getElementsByTagName('div')[1].focus();
 }
 function thc(ev) {
 hcol = ev.target.value;
 document.execCommand("hiliteColor", false, ev.target.value);
-document.getElementsByTagName('div')[0].focus();
+document.getElementsByTagName('div')[1].focus();
 }
 function fn() {
 var link = prompt("Enter a font name");
 document.execCommand("fontName", false, link);
-document.getElementsByTagName('div')[0].focus();
+document.getElementsByTagName('div')[1].focus();
 }
 function cl(ev) {
 document.execCommand("removeFormat");
-document.getElementsByTagName('div')[0].focus();
+document.getElementsByTagName('div')[1].focus();
 }
 function inhtml() {
 var page = prompt("Enter an HTML script");
 document.execCommand("insertHTML", false, page);
-document.getElementsByTagName('div')[0].focus();
+document.getElementsByTagName('div')[1].focus();
 }
 function printDiv(idd) { 
             var divContents = document.getElementById(idd).innerHTML; 
@@ -195,10 +195,10 @@ window.addEventListener('appinstalled', (event) => {
 <button title="Underline" value="U" onclick="u()"><img src="https://hypercreeper.github.io/notepad/underline.png"></button>
 <button title="Italic" value="I" onclick="i()"><img src="https://hypercreeper.github.io/notepad/italic.png"></button>
 <button title="Strikethrough" value="S" onclick="s()"><img src="https://hypercreeper.github.io/notepad/strikethrough.png"></button>
-<button title="Justify Left" value="" onclick="jl()"><img src="https://raw.githubusercontent.com/hypercreeper/notepad/main/left.png"></button>
+<button title="Justify Left" value="" onclick="jl()"><img src="https://raw.githubusercontent.com/hypercreeper/notepad/main/right.png"></button>
 <button title="Justify Center" value="" onclick="jc()"><img src="https://raw.githubusercontent.com/hypercreeper/notepad/main/center.png"></button>
 <button title="Justify Full" value="" onclick="jf()"><img src="https://raw.githubusercontent.com/hypercreeper/notepad/main/full.png"></button>
-<button title="Justify Right" value="" onclick="jr()"><img src="https://raw.githubusercontent.com/hypercreeper/notepad/main/right.png"></button>
+<button title="Justify Right" value="" onclick="jr()"><img src="https://raw.githubusercontent.com/hypercreeper/notepad/main/left.png"></button>
 <button title="Decrease font Size" value="A-" onclick="sm()"><img src="https://hypercreeper.github.io/notepad/font_down.png"></button>
 <button title="font Size" value="A" onclick="si()"><img src="https://hypercreeper.github.io/notepad/font_size.png"></button>
 <button title="Increase font Size" value="A+" onclick="sp()"><img src="https://hypercreeper.github.io/notepad/font_up.png"></button>
