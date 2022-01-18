@@ -128,12 +128,12 @@ function printDiv(idd) {
             a.document.close(); 
             a.print(); 
         } 
-function savetext() {
+function savetext(fileextension) {
 let data = document.getElementById("divy").innerHTML;
         
         // Convert the text to BLOB.
         const textToBLOB = new Blob([data], { type: 'text/mdocx' });
-        const sFileName = document.getElementById("tf").value + '.mdocx';	   // The file to save the data.
+        const sFileName = document.getElementById("tf").value + fileextension;	   // The file to save the data.
 
         let newLink = document.createElement("a");
         newLink.download = sFileName;
@@ -191,15 +191,29 @@ window.addEventListener('appinstalled', (event) => {
 });
 </script>
 <div contenteditable="false" style="position: fixed; top: 1%; background-color: white; padding-top: 10px; padding-left: 10px; padding-right: 10px; padding-bottom: 10px; box-shadow: 0px 10px 20px gray;">
-<button title="Bold" value="B" onclick="b()"><img src="https://hypercreeper.github.io/notepad/bold.png"></button>
-<button title="Underline" value="U" onclick="u()"><img src="https://hypercreeper.github.io/notepad/underline.png"></button>
-<button title="Italic" value="I" onclick="i()"><img src="https://hypercreeper.github.io/notepad/italic.png"></button>
-<button title="Strikethrough" value="S" onclick="s()"><img src="https://hypercreeper.github.io/notepad/strikethrough.png"></button>
-<button title="Justify Left" value="" onclick="jl()"><img src="https://raw.githubusercontent.com/hypercreeper/notepad/main/right.png"></button>
-<button title="Justify Center" value="" onclick="jc()"><img src="https://raw.githubusercontent.com/hypercreeper/notepad/main/center.png"></button>
-<button title="Justify Full" value="" onclick="jf()"><img src="https://raw.githubusercontent.com/hypercreeper/notepad/main/full.png"></button>
-<button title="Justify Right" value="" onclick="jr()"><img src="https://raw.githubusercontent.com/hypercreeper/notepad/main/left.png"></button>
-<button title="Decrease font Size" value="A-" onclick="sm()"><img src="https://hypercreeper.github.io/notepad/font_down.png"></button>
+
+<button title="Bold" value="B" onclick="b()">
+	<img src="https://hypercreeper.github.io/notepad/bold.png">
+</button>
+<button title="Underline" value="U" onclick="u()">
+	<img src="https://hypercreeper.github.io/notepad/underline.png">
+</button>
+<button title="Italic" value="I" onclick="i()">
+	<img src="https://hypercreeper.github.io/notepad/italic.png">
+</button>
+<button title="Strikethrough" value="S" onclick="s()">
+	<img src="https://hypercreeper.github.io/notepad/strikethrough.png">
+</button>
+<button title="Justify Left" value="" onclick="jl()">
+<img src="https://raw.githubusercontent.com/hypercreeper/notepad/main/right.png"></button>
+<button title="Justify Center" value="" onclick="jc()">
+<img src="https://raw.githubusercontent.com/hypercreeper/notepad/main/center.png"></button>
+<button title="Justify Full" value="" onclick="jf()">
+<img src="https://raw.githubusercontent.com/hypercreeper/notepad/main/full.png"></button>
+<button title="Justify Right" value="" onclick="jr()">
+<img src="https://raw.githubusercontent.com/hypercreeper/notepad/main/left.png"></button>
+<button title="Decrease font Size" value="A-" onclick="sm()">
+<img src="https://hypercreeper.github.io/notepad/font_down.png"></button>
 <button title="font Size" value="A" onclick="si()"><img src="https://hypercreeper.github.io/notepad/font_size.png"></button>
 <button title="Increase font Size" value="A+" onclick="sp()"><img src="https://hypercreeper.github.io/notepad/font_up.png"></button>
 <button title="Bullet Point" value="* " onclick="bp()"><img src="https://raw.githubusercontent.com/hypercreeper/notepad/main/bullets.png"></button>
@@ -219,7 +233,7 @@ window.addEventListener('appinstalled', (event) => {
 <button title="Font name" value="F" onclick="fn()"><img src="https://hypercreeper.github.io/notepad/font.png"></button>
 <button title="Insert HTML" value="</>" onclick="inhtml()"><img src="https://hypercreeper.github.io/notepad/code.png"></button>
 <button title="Clear Formatting" value="C" onclick="cl(event)" style="background-color: red;"><img src="https://hypercreeper.github.io/notepad/clear.png"></button>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button title="Print" value="Print" onclick="printDiv('divy')"><img src="https://raw.githubusercontent.com/hypercreeper/notepad/main/print.png"></button><input id="tf" placeholder="enter file name here"><button value="save" onclick="savetext()" title="Save File"><img src="https://raw.githubusercontent.com/hypercreeper/notepad/main/save.png"></button><input type="file" id="ff" onchange="openfile(document.getElementById('ff').files[0])" accept=".mdocx" hidden><button value="open" onclick="document.getElementById('ff').click();" title="Open File"><img src="https://raw.githubusercontent.com/hypercreeper/notepad/main/open.png"></button>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button title="Print" value="Print" onclick="printDiv('divy')"><img src="https://raw.githubusercontent.com/hypercreeper/notepad/main/print.png"></button><input id="tf" placeholder="enter file name here"><button value="save" onclick="savetext('.mdocx')" title="Save File"><img src="https://raw.githubusercontent.com/hypercreeper/notepad/main/save.png"><p> as .mdocx</p></button><button value="save" onclick="savetext('.html')" title="Save File"><img src="https://raw.githubusercontent.com/hypercreeper/notepad/main/save.png"><p> as readonly .html</p></button><input type="file" id="ff" onchange="openfile(document.getElementById('ff').files[0])" accept=".mdocx" hidden><button value="open" onclick="document.getElementById('ff').click();" title="Open File"><img src="https://raw.githubusercontent.com/hypercreeper/notepad/main/open.png"></button>
 
 </div>
 <style>
