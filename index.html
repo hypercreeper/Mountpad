@@ -2,6 +2,23 @@
 <head style="outline: none;">
 <title>Notepad</title>
 <meta ref="manifest" href="https://raw.githubusercontent.com/hypercreeper/notepad/main/manifest.json">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="Mount Pad">
+<link rel="stylesheet" type="text/css" href="/src/style/addtohomescreen.css">
+	<script type="text/javascript" src="/src/src/addtohomescreen.js"></script>
+	<script>
+	if(
+	(("standalone" in window.navigator) && !window.navigator.standalone) //ios
+	||
+	( !window.matchMedia('(display-mode: standalone)').matches ) // android
+	) {
+	addToHomeScreen();
+	}
+	</script>
 </head>
 <br><br>
 <body>
