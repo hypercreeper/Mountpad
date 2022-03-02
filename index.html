@@ -122,7 +122,7 @@ document.execCommand("hiliteColor", false, ev.target.value);
 document.getElementsByTagName('div')[1].focus();
 }
 function fn() {
-var link = prompt("Enter a font name");
+var link = prompt("Enter a font name: \nsans-serif - Sans Serif\ncursive - Comic Sans MS\nserif - Serif");
 document.execCommand("fontName", false, link);
 document.getElementsByTagName('div')[1].focus();
 }
@@ -261,8 +261,8 @@ border-style: outset;
 input:active {
 border-style: inset;
 }
-#divy:focus {
-height: auto;
+#divy {
+min-height: 80%;
 }
 </style>
 <br>
