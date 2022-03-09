@@ -135,6 +135,74 @@ var page = prompt("Enter an HTML script");
 document.execCommand("insertHTML", false, page);
 document.getElementsByTagName('div')[1].focus();
 }
+function Encoder(html) {
+var mdocx;
+// We make sure to delete these cuz they are not needed. 
+mdocx = html.replace('<html>','');
+mdocx = mdocx.replace('</html>','');
+mdocx = mdocx.replace('<body>','');
+mdocx = mdocx.replace('</body>','');
+mdocx = mdocx.replace('</div><div>','/n');
+
+
+//Now we change the bold and stuff like that
+mdocx = mdocx.replace('<b>','[b]');
+mdocx = mdocx.replace('</b>','[-b]');
+mdocx = mdocx.replace('<u>','[u]');
+mdocx = mdocx.replace('</u>','[-u]');
+mdocx = mdocx.replace('<i>','[i]');
+mdocx = mdocx.replace('</i>','[-i]');
+mdocx = mdocx.replace('<strike>','[s]');
+mdocx = mdocx.replace('</stike>','[-s]');
+// There isnt much we can do for justify left but just in case
+mdocx = mdocx.replace('<div style="text-align: left;">','[<j]');
+mdocx = mdocx.replace('<div style="text-align: center;">','[{j}]');
+mdocx = mdocx.replace('<div style="text-align: justify;">','[|j|]');
+mdocx = mdocx.replace('<div style="text-align: right;">','[j>]');
+mdocx = mdocx.replace('</div>','[-j]');
+var fontsize = '<font size="">';
+mdocx = mdocx.replace('<font size="">','[t:' + fontsize.substring(13,14));
+mdocx = mdocx.replace('</font>','[-t]');
+<!-- mdocx = mdocx.replace('',''); -->
+<!-- mdocx = mdocx.replace('',''); -->
+<!-- mdocx = mdocx.replace('',''); -->
+<!-- mdocx = mdocx.replace('',''); -->
+<!-- mdocx = mdocx.replace('',''); -->
+<!-- mdocx = mdocx.replace('',''); -->
+<!-- mdocx = mdocx.replace('',''); -->
+<!-- mdocx = mdocx.replace('',''); -->
+
+return mdocx
+}
+function Decoder(mdocx) {
+var html;
+
+//Now we change the bold and stuff like that
+html = mdocx.replace('[b]','<b>');
+html = html.replace('[-b]','</b>');
+html = html.replace('[u]','<u>');
+html = html.replace('[-u]','</u>');
+html = html.replace('[i]','<i>');
+html = html.replace('[-i]','</i>');
+html = html.replace('[s]','<strike>');
+html = html.replace('[-s]','</strike>');
+html = html.replace('/n','<br>');
+// There isnt much we can do for justify left but just in case
+html = html.replace('[<j]','<div style="text-align: left;">');
+html = html.replace('[{j}]','<div style="text-align: center;">');
+html = html.replace('[|j|]','<div style="text-align: justify;">');
+html = html.replace('[j>]','<div style="text-align: right;">');
+html = html.replace('[-j]','</div>');
+<!-- html = html.replace('',''); -->
+<!-- html = html.replace('',''); -->
+<!-- html = html.replace('',''); -->
+<!-- html = html.replace('',''); -->
+<!-- html = html.replace('',''); -->
+<!-- html = html.replace('',''); -->
+<!-- html = html.replace('',''); -->
+<!-- html = html.replace('',''); -->
+return html
+}
 function printDiv(idd) { 
             var divContents = document.getElementById(idd).innerHTML; 
             var a = window.open('', '', 'height=' + screen.height + ', width=' + screen.width); 
@@ -145,13 +213,21 @@ function printDiv(idd) {
             a.document.close(); 
             a.print(); 
         } 
+function typecheck(fileextension, data) {
+if(fileextension == '.html') {
+return data
+}
+if(fileextension == '.mdocx') {
+return Encoder(data)
+}
+if(fileextension != '.mdocx' && fileextension != '.html') {
+console.error("File type unknown: " + fileextension);
+}
+}
 function savetext(fileextension) {
 let data = document.getElementById("divy").innerHTML;
-        
-        // Convert the text to BLOB.
-        const textToBLOB = new Blob([data], { type: 'text/mdocx' });
         const sFileName = document.getElementById("tf").value + fileextension;	   // The file to save the data.
-
+		const textToBLOB = new Blob([typecheck(fileextension, data)], { type: 'text/mdocx' });
         let newLink = document.createElement("a");
         newLink.download = sFileName;
 
@@ -168,44 +244,12 @@ let data = document.getElementById("divy").innerHTML;
     }
 	function openfile(file) {
 	const reader = new FileReader();
-reader.onload = event => document.getElementById("divy").innerHTML = event.target.result; // desired file content
+reader.onload = event => document.getElementById("divy").innerHTML = Decoder(event.target.result); // desired file content
 reader.onerror = error => reject(error);
 document.getElementById("divy").innerHTML = reader.readAsText(file); // you could also read images and other binaries
 document.getElementById("divy").focus();
-document.getElementById("tf").value = document.getElementById("ff").files[0].name.replace('.mdocx','');;
+document.getElementById("tf").value = document.getElementById("ff").files[0].name.replace('.mdocx','');
 }
-</script>
-<script>
-window.addEventListener('beforeinstallprompt', (event) => {
-  console.log('👍', 'beforeinstallprompt', event);
-  // Stash the event so it can be triggered later.
-  window.deferredPrompt = event;
-  // Remove the 'hidden' class from the install button container
-  divInstall.classList.toggle('hidden', false);
-});
-butInstall.addEventListener('click', async () => {
-  console.log('👍', 'butInstall-clicked');
-  const promptEvent = window.deferredPrompt;
-  if (!promptEvent) {
-    // The deferred prompt isn't available.
-    return;
-  }
-  // Show the install prompt.
-  promptEvent.prompt();
-  // Log the result
-  const result = await promptEvent.userChoice;
-  console.log('👍', 'userChoice', result);
-  // Reset the deferred prompt variable, since
-  // prompt() can only be called once.
-  window.deferredPrompt = null;
-  // Hide the install button.
-  divInstall.classList.toggle('hidden', true);
-});
-window.addEventListener('appinstalled', (event) => {
-  console.log('👍', 'appinstalled', event);
-  // Clear the deferredPrompt so it can be garbage collected
-  window.deferredPrompt = null;
-});
 </script>
 <div contenteditable="false" style="position: fixed; top: 1%; background-color: white; padding-top: 10px; padding-left: 10px; padding-right: 10px; padding-bottom: 10px; box-shadow: 0px 10px 20px gray;">
 
