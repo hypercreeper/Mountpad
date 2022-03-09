@@ -137,8 +137,8 @@ document.getElementsByTagName('div')[1].focus();
 }
 function invid() {
 var page = prompt("Enter a youtube video link");
-page = page.replace('https://www.youtube.com/watch?v=r3xW1qZ2Sk0','<iframe width="560" height="315" src="https://www.youtube.com/embed/' + page.substring(32,42) + '" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>');
-alert(page);
+page = page.replace('https://www.youtube.com/watch?v=','<iframe width="560" height="315" src="https://www.youtube.com/embed/');
+page += '" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
 document.execCommand("insertHTML", false, page);
 document.getElementsByTagName('div')[1].focus();
 }
@@ -304,11 +304,11 @@ document.getElementById("tf").value = document.getElementById("ff").files[0].nam
 │
 <button title="Insert image" value="Im" onclick="ii()"><img src="https://hypercreeper.github.io/Mountpad/insert_pic.png"></button>
 <button title="Insert HTML" value="</>" onclick="inhtml()"><img src="https://hypercreeper.github.io/Mountpad/code.png"></button>
-<button title="Insert YouTube video" value="YTv" onclick="inhtml()"><img src="https://hypercreeper.github.io/Mountpad/YT_Logo.png"></button>
+<button title="Insert YouTube video" value="YTv" onclick="invid()"><img src="https://hypercreeper.github.io/Mountpad/YT_Logo.png"></button>
 │
-
 <button title="Clear Formatting" value="C" onclick="cl(event)" style="background-color: red;"><img src="https://hypercreeper.github.io/Mountpad/clear.png"></button>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button title="Print" value="Print" onclick="printDiv('divy')"><img src="https://raw.githubusercontent.com/hypercreeper/Mountpad/main/print.png"></button><input id="tf" placeholder="enter file name here"><button value="save" onclick="savetext('.mdocx')" title="Save File"><img src="https://raw.githubusercontent.com/hypercreeper/Mountpad/main/save.png"><p style="float: right;"> as .mdocx</p></button><button value="save" onclick="savetext('.html')" title="Save File"><img src="https://raw.githubusercontent.com/hypercreeper/Mountpad/main/save.png"><p style="float: right;"> as readonly .html</p></button><input type="file" id="ff" onchange="openfile(document.getElementById('ff').files[0])" accept=".mdocx" hidden><button value="open" onclick="document.getElementById('ff').click();" title="Open File"><img src="https://raw.githubusercontent.com/hypercreeper/Mountpad/main/open.png"></button>
+│
+<button title="Print" value="Print" onclick="printDiv('divy')"><img src="https://raw.githubusercontent.com/hypercreeper/Mountpad/main/print.png"></button>&nbsp;<input id="tf" placeholder="enter file name here">&nbsp;<button value="save" onclick="savetext('.mdocx')" title="Save File"><img src="https://raw.githubusercontent.com/hypercreeper/Mountpad/main/save.png"> as .mdocx</button>&nbsp;<button value="save" onclick="savetext('.html')" title="Save File"><img src="https://raw.githubusercontent.com/hypercreeper/Mountpad/main/save.png"> as readonly .html</button>&nbsp;│&nbsp;<input type="file" id="ff" onchange="openfile(document.getElementById('ff').files[0])" accept=".mdocx" hidden><button value="open" onclick="document.getElementById('ff').click();" title="Open File"><img src="https://raw.githubusercontent.com/hypercreeper/Mountpad/main/open.png"></button>
 
 </div>
 <style>
