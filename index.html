@@ -1,9 +1,38 @@
 <html>
 <head style="outline: none;">
 <title>Mountpad</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300&display=swap" rel="stylesheet">
+<style>
+button {
+font-family: 'Fredoka', sans-serif;
+font-weight: 800;
+height: 30px;
+width: 40px;
+background-color: white;
+border-style: solid;
+border-width: 1px;
+border-color: black;
+border-radius: 5px;
+transition-duration: 0.1s;
+}
+button:hover {
+background-color: lightgray;
+}
+button.save { 
+height: 33px;
+width: 145px;
+margin-top: 10px;
+}
+input {
+font-family: 'Fredoka', sans-serif;
+font-weight: 800;
+}
+</style>
 </head>
 <br><br>
-<body>
+<body style="font-family: 'Fredoka', sans-serif;" >
 <script>
 function b() {
 document.execCommand("bold");
@@ -76,13 +105,10 @@ document.execCommand("insertImage", false, link);
 document.getElementsByTagName('div')[1].focus();
 }
 var col = "";
-function ct(ev) {
-document.execCommand("foreColor", false, col);
-document.getElementsByTagName('div')[1].focus();
-}
 function tc(ev) {
 col = ev.target.value;
 document.execCommand("foreColor", false, ev.target.value);
+document.getElementById("tcbtn").style.backgroundColor = col;
 document.getElementsByTagName('div')[1].focus();
 }
 function bp() {
@@ -94,17 +120,14 @@ document.execCommand("insertOrderedList");
 document.getElementsByTagName('div')[1].focus();
 }
 var hcol = "";
-function ch(ev) {
-document.execCommand("hiliteColor", false, hcol);
-document.getElementsByTagName('div')[1].focus();
-}
-function thc(ev) {
+function hc(ev) {
 hcol = ev.target.value;
 document.execCommand("hiliteColor", false, ev.target.value);
+document.getElementById("hcbtn").style.backgroundColor = hcol;
 document.getElementsByTagName('div')[1].focus();
 }
 function fn() {
-var link = prompt("Enter a font name: \nsans-serif - Sans Serif\ncursive - Comic Sans MS\nserif - Serif");
+var link = prompt("Enter a font name: \nfredoka - Fredoka (Default) \nsans-serif - Sans Serif\ncursive - Comic Sans MS\nserif - Serif");
 document.execCommand("fontName", false, link);
 document.getElementsByTagName('div')[1].focus();
 }
@@ -240,8 +263,9 @@ document.getElementById("divy").focus();
 document.getElementById("tf").value = document.getElementById("ff").files[0].name.replace('.mdocx','');
 }
 </script>
-<div contenteditable="false" style="font-size: 30px; position: fixed; top: 1%; background-color: white; padding-top: 10px; padding-left: 10px; padding-right: 10px; padding-bottom: 10px; box-shadow: 0px 10px 20px gray;">
-
+<div contenteditable="false" style="height:80px; font-size: 30px; position: fixed; top: 1%; background-color: white; padding-top: 10px; padding-left: 10px; padding-right: 10px; padding-bottom: 10px; box-shadow: 0px 10px 20px gray;">
+<br>
+<div style="margin-top: 15px;">
 <button title="Undo" value="<-" onclick="un()"><img src="https://hypercreeper.github.io/Mountpad/undo.png"></button>
 <button title="Redo" value="->" onclick="re()"><img src="https://hypercreeper.github.io/Mountpad/redo.png"></button>
 │
@@ -273,12 +297,12 @@ document.getElementById("tf").value = document.getElementById("ff").files[0].nam
 <button title="Increase font Size" value="A+" onclick="sp()"><img src="https://hypercreeper.github.io/Mountpad/font_up.png"></button>
 <button title="Font name" value="F" onclick="fn()"><img src="https://hypercreeper.github.io/Mountpad/font.png"></button>
 
-<button type="color" title="Choose Text Color" onclick="ct()"><img src="https://hypercreeper.github.io/Mountpad/text_color.png"></button>
+<button type="color" title="Choose Text Color" id="tcbtn" onclick="document.getElementById('tc').click();"><img src="https://hypercreeper.github.io/Mountpad/text_color.png"></button>
 <input type="color" title="Choose Text Color" value="#000000" id="tc" onchange="tc(event)" hidden>
 
-<button type="color" title="Choose Highlight Color" onclick="ch(event)"><img src="https://hypercreeper.github.io/Mountpad/bg_color.png"></button>
-<input type="color" title="Choose Highlight Color" value="#ffffff" id="hc" onchange="thc(event)" hidden>
-
+<button type="color" title="Choose Highlight Color" id="hcbtn" onclick="document.getElementById('hc').click();"><img src="https://hypercreeper.github.io/Mountpad/bg_color.png"></button>
+<input type="color" title="Choose Highlight Color" value="#ffffff" id="hc" onchange="hc(event)" hidden>
+<button title="Clear Formatting" value="C" onclick="cl(event)" style="background-color: red;"><img src="https://hypercreeper.github.io/Mountpad/clear.png"></button>
 │
 <button title="Bullet Point" value="* " onclick="bp()"><img src="https://raw.githubusercontent.com/hypercreeper/Mountpad/main/bullets.png"></button>
 <button title="Number Bullet Point" value="1." onclick="nbp()"><img src="https://raw.githubusercontent.com/hypercreeper/Mountpad/main/number_bullets.png"></button>
@@ -287,10 +311,21 @@ document.getElementById("tf").value = document.getElementById("ff").files[0].nam
 <button title="Insert HTML" value="</>" onclick="inhtml()"><img src="https://hypercreeper.github.io/Mountpad/code.png"></button>
 <button title="Insert YouTube video" value="YTv" onclick="invid()"><img src="https://hypercreeper.github.io/Mountpad/YT_Logo.png"></button>
 │
-<button title="Clear Formatting" value="C" onclick="cl(event)" style="background-color: red;"><img src="https://hypercreeper.github.io/Mountpad/clear.png"></button>
+<button title="Print" value="Print" onclick="printDiv('divy')"><img src="https://raw.githubusercontent.com/hypercreeper/Mountpad/main/print.png"></button>
+</div>
+<div style="position: absolute; top: 1px; left: 2px;">
+<input id="tf" placeholder="enter file name here" onclick="this.select();" class="filename" title="File Name" value="New Document" style="width: 177px; height: 31px; border-style: solid; border-width: 1px; border-color: black; border-radius: 5px;">
+&nbsp;
+<button value="save" class="save" onclick="savetext('.mdocx')" title="Save File"><img src="https://raw.githubusercontent.com/hypercreeper/Mountpad/main/save.png"> as .mdocx</button>
+&nbsp;
+<button value="save" class="save" onclick="savetext('.html')" title="Save File"><img src="https://raw.githubusercontent.com/hypercreeper/Mountpad/main/save.png"> as readonly .html</button>
+&nbsp;
 │
-<button title="Print" value="Print" onclick="printDiv('divy')"><img src="https://raw.githubusercontent.com/hypercreeper/Mountpad/main/print.png"></button>&nbsp;<input id="tf" placeholder="enter file name here">&nbsp;<button value="save" onclick="savetext('.mdocx')" title="Save File"><img src="https://raw.githubusercontent.com/hypercreeper/Mountpad/main/save.png"> as .mdocx</button>&nbsp;<button value="save" onclick="savetext('.html')" title="Save File"><img src="https://raw.githubusercontent.com/hypercreeper/Mountpad/main/save.png"> as readonly .html</button>&nbsp;│&nbsp;<input type="file" id="ff" onchange="openfile(document.getElementById('ff').files[0])" accept=".mdocx" hidden><button value="open" onclick="document.getElementById('ff').click();" title="Open File"><img src="https://raw.githubusercontent.com/hypercreeper/Mountpad/main/open.png"></button>
-
+&nbsp;
+<input type="file" id="ff" onchange="openfile(document.getElementById('ff').files[0])" accept=".mdocx" hidden>
+<button value="open" onclick="document.getElementById('ff').click();" title="Open File">
+<img src="https://raw.githubusercontent.com/hypercreeper/Mountpad/main/open.png"></button>
+</div>
 </div>
 <style>
 input {
