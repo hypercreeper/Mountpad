@@ -284,7 +284,7 @@ document.getElementById("tf").value = document.getElementById("ff").files[0].nam
 </script>
 <div contenteditable="false" class="nonselectable" style="height:80px; font-size: 30px; position: fixed; top: 1%; background-color: white; padding-top: 10px; padding-left: 10px; padding-right: 10px; padding-bottom: 10px; box-shadow: 0px 10px 20px gray;">
 <br>
-<img src="https://hypercreeper.github.io/Mountpad/account.png" style="position: absolute; top: 5px; left: 97%; height: 30px; width: 30px; cursor: pointer;">
+<img id="pfpimage" src="https://hypercreeper.github.io/Mountpad/account.png" style="position: absolute; top: 5px; left: 97%; height: 30px; width: 30px; cursor: pointer;">
 <div class="g-signin3" data-onsuccess="onSignIn"></div>
 <div style="margin-top: 15px;">
 <button title="Undo" value="<-" onclick="un()"><img src="https://hypercreeper.github.io/Mountpad/undo.png"></button>
@@ -364,6 +364,16 @@ min-height: 80%;
 <div id="divy" contenteditable="true" autofocus style="outline: none; width: 100%; margin-top: 60px; border-color: black; border-width: 2px; border-style: dotted;">
 
 </div>
+<script>
+function onSignIn(googleUser) {
+  var profile = googleUser.getBasicProfile();
+  console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+  console.log('Name: ' + profile.getName());
+  document.getElementById("pfpimage").src = profile.getImageUrl()
+  console.log('Image URL: ' + profile.getImageUrl());
+  console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+}
+</script>
 	<script type="module">
   // Import the functions you need from the SDKs you need
   import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.7/firebase-app.js";
