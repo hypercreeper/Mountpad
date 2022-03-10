@@ -5,6 +5,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300&display=swap" rel="stylesheet">
+<script src="https://apis.google.com/js/platform.js" async defer></script>
+<meta name="google-signin-client_id" content="106320186250-deif6nao1t901htl9k6da5tflhpdkvq9.apps.googleusercontent.com">
 <style>
 button {
 font-family: 'Fredoka', sans-serif;
@@ -29,6 +31,22 @@ margin-top: 10px;
 input {
 font-family: 'Fredoka', sans-serif;
 font-weight: 800;
+}
+img {
+user-drag: none;
+    -webkit-user-drag: none;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+}
+.nonselectable {
+-webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 </style>
 </head>
@@ -264,9 +282,10 @@ document.getElementById("divy").focus();
 document.getElementById("tf").value = document.getElementById("ff").files[0].name.replace('.mdocx','');
 }
 </script>
-<div contenteditable="false" style="height:80px; font-size: 30px; position: fixed; top: 1%; background-color: white; padding-top: 10px; padding-left: 10px; padding-right: 10px; padding-bottom: 10px; box-shadow: 0px 10px 20px gray;">
+<div contenteditable="false" class="nonselectable" style="height:80px; font-size: 30px; position: fixed; top: 1%; background-color: white; padding-top: 10px; padding-left: 10px; padding-right: 10px; padding-bottom: 10px; box-shadow: 0px 10px 20px gray;">
 <br>
-<img src="https://hypercreeper.github.io/Mountpad/account.png">
+<img src="https://hypercreeper.github.io/Mountpad/account.png" style="position: absolute; top: 5px; left: 97%; height: 30px; width: 30px; cursor: pointer;">
+<div class="g-signin3" data-onsuccess="onSignIn"></div>
 <div style="margin-top: 15px;">
 <button title="Undo" value="<-" onclick="un()"><img src="https://hypercreeper.github.io/Mountpad/undo.png"></button>
 <button title="Redo" value="->" onclick="re()"><img src="https://hypercreeper.github.io/Mountpad/redo.png"></button>
