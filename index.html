@@ -36,35 +36,35 @@ font-weight: 800;
 <script>
 function b() {
 document.execCommand("bold");
-document.getElementsByTagName('div')[1].focus();
+document.getElementById("divy").focus();
 }
 function u() {
 document.execCommand("underline");
-document.getElementsByTagName('div')[1].focus();
+document.getElementById("divy").focus();
 }
 function i() {
 document.execCommand("italic");
-document.getElementsByTagName('div')[1].focus();
+document.getElementById("divy").focus();
 }
 function s() {
 document.execCommand("strikeThrough");
-document.getElementsByTagName('div')[1].focus();
+document.getElementById("divy").focus();
 }
 var fontsize = 3;
 function sm() {
 fontsize--;
 document.execCommand("fontSize", false, fontsize);
-document.getElementsByTagName('div')[1].focus();
+document.getElementById("divy").focus();
 }
 function si() {
 var sizee = prompt("Enter a size from 1-7");
 document.execCommand("fontSize", false, sizee);
-document.getElementsByTagName('div')[1].focus();
+document.getElementById("divy").focus();
 }
 function sp() {
 fontsize++;
 document.execCommand("fontSize", false, fontsize);
-document.getElementsByTagName('div')[1].focus();
+document.getElementById("divy").focus();
 }
 function checknow() {
 if(fontsize > 7) {
@@ -77,75 +77,75 @@ fontsize++;
 setInterval(checknow, 10);
 function un() {
 document.execCommand("undo");
-document.getElementsByTagName('div')[1].focus();
+document.getElementById("divy").focus();
 }
 function re() {
 document.execCommand("redo");
-document.getElementsByTagName('div')[1].focus();
+document.getElementById("divy").focus();
 }
 function jl() {
 document.execCommand("justifyLeft");
-document.getElementsByTagName('div')[1].focus();
+document.getElementById("divy").focus();
 }
 function jc() {
 document.execCommand("justifyCenter");
-document.getElementsByTagName('div')[1].focus();
+document.getElementById("divy").focus();
 }
 function jf() {
 document.execCommand("justifyFull");
-document.getElementsByTagName('div')[1].focus();
+document.getElementById("divy").focus();
 }
 function jr() {
 document.execCommand("justifyRight");
-document.getElementsByTagName('div')[1].focus();
+document.getElementById("divy").focus();
 }
 function ii() {
 var link = prompt("Enter an image link");
 document.execCommand("insertImage", false, link);
-document.getElementsByTagName('div')[1].focus();
+document.getElementById("divy").focus();
 }
 var col = "";
 function tc(ev) {
 col = ev.target.value;
 document.execCommand("foreColor", false, ev.target.value);
 document.getElementById("tcbtn").style.backgroundColor = col;
-document.getElementsByTagName('div')[1].focus();
+document.getElementById("divy").focus();
 }
 function bp() {
 document.execCommand("insertUnorderedList")
-document.getElementsByTagName('div')[1].focus();
+document.getElementById("divy").focus();
 }
 function nbp() {
 document.execCommand("insertOrderedList");
-document.getElementsByTagName('div')[1].focus();
+document.getElementById("divy").focus();
 }
 var hcol = "";
 function hc(ev) {
 hcol = ev.target.value;
 document.execCommand("hiliteColor", false, ev.target.value);
 document.getElementById("hcbtn").style.backgroundColor = hcol;
-document.getElementsByTagName('div')[1].focus();
+document.getElementById("divy").focus();
 }
 function fn() {
 var link = prompt("Enter a font name: \nfredoka - Fredoka (Default) \nsans-serif - Sans Serif\ncursive - Comic Sans MS\nserif - Serif");
 document.execCommand("fontName", false, link);
-document.getElementsByTagName('div')[1].focus();
+document.getElementById("divy").focus();
 }
 function cl(ev) {
 document.execCommand("removeFormat");
-document.getElementsByTagName('div')[1].focus();
+document.getElementById("divy").focus();
 }
 function inhtml() {
 var page = prompt("Enter an HTML script");
 document.execCommand("insertHTML", false, page);
-document.getElementsByTagName('div')[1].focus();
+document.getElementById("divy").focus();
 }
 function invid() {
 var page = prompt("Enter a youtube video link");
 page = page.replace('https://www.youtube.com/watch?v=','<iframe width="560" height="315" src="https://www.youtube.com/embed/');
 page += '" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
 document.execCommand("insertHTML", false, page);
-document.getElementsByTagName('div')[1].focus();
+document.getElementById("divy").focus();
 }
 function Encoder(html) {
 var mdocx;
