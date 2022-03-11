@@ -281,11 +281,36 @@ document.getElementById("divy").innerHTML = reader.readAsText(file); // you coul
 document.getElementById("divy").focus();
 document.getElementById("tf").value = document.getElementById("ff").files[0].name.replace('.mdocx','');
 }
+var accbox = document.getElementById("accbox");
+var menuOpen = false;
+function showAccountBox() {
+	if(menuOpen == false) {
+	document.getElementById("accbox").style.height = "200px";
+	document.getElementById("accbox").style.width = "170px";
+	setTimeout(function() {document.getElementById("gsignin").hidden = false;}, 60);
+	setTimeout(function() {document.getElementById("name").hidden = false;}, 60);
+	menuOpen = true;
+	}
+	else {
+		hideAccountBox();
+	}
+}
+function hideAccountBox() {
+	menuOpen = false;
+	document.getElementById("gsignin").hidden = true;
+	document.getElementById("name").hidden = true;
+	document.getElementById("accbox").style.height = "0px";
+	document.getElementById("accbox").style.width = "0px";
+}
 </script>
+
 <div contenteditable="false" class="nonselectable" style="height:80px; font-size: 30px; position: fixed; top: 1%; background-color: white; padding-top: 10px; padding-left: 10px; padding-right: 10px; padding-bottom: 10px; box-shadow: 0px 10px 20px gray;">
 <br>
-<img id="pfpimage" src="https://hypercreeper.github.io/Mountpad/account.png" style="position: absolute; top: 5px; left: 97%; height: 30px; width: 30px; cursor: pointer;">
-<div class="g-signin3" data-onsuccess="onSignIn"></div>
+<img id="pfpimage" contenteditable="true" onclick="showAccountBox()" src="https://hypercreeper.github.io/Mountpad/account.png" style="position: absolute; top: 5px; left: 97%; height: 30px; width: 30px; cursor: pointer;">
+<div id="accbox" style="transition-duration: 0.2s; border-style: dotted; border-color: black; border-radius: 5px; border-width: 1px; height: 0px; width: 0px; position: absolute; top: 30px; left: 87%; background-color: white;">
+<h5 style="margin-top: 10px; text-align: center;" id="name" hidden>Name</h5>
+<div id="gsignin" hidden style="margin-left: 25px; margin-top: 50px;" class="g-signin2" data-onsuccess="onSignIn"></div>
+</div>
 <div style="margin-top: 15px;">
 <button title="Undo" value="<-" onclick="un()"><img src="https://hypercreeper.github.io/Mountpad/undo.png"></button>
 <button title="Redo" value="->" onclick="re()"><img src="https://hypercreeper.github.io/Mountpad/redo.png"></button>
@@ -335,6 +360,8 @@ document.getElementById("tf").value = document.getElementById("ff").files[0].nam
 <button title="Print" value="Print" onclick="printDiv('divy')"><img src="https://raw.githubusercontent.com/hypercreeper/Mountpad/main/print.png"></button>
 </div>
 <div style="position: absolute; top: 1px; left: 2px;">
+<img src="https://hypercreeper.github.io/Mountpad/icon.png" style="height: 50px; width: 50px; position: absolute;">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 <input id="tf" placeholder="enter file name here" onclick="this.select();" class="filename" title="File Name" value="New Document" style="width: 177px; height: 31px; border-style: solid; border-width: 1px; border-color: black; border-radius: 5px;">
 &nbsp;
 <button value="save" class="save" onclick="savetext('.mdocx')" title="Save File"><img src="https://raw.githubusercontent.com/hypercreeper/Mountpad/main/save.png"> as .mdocx</button>
@@ -361,15 +388,16 @@ min-height: 80%;
 }
 </style>
 <br>
-<div id="divy" contenteditable="true" autofocus style="outline: none; width: 100%; margin-top: 60px; border-color: black; border-width: 2px; border-style: dotted;">
+<div id="divy" autofocus style="outline: none; width: 100%; margin-top: 60px; border-color: black; border-width: 2px; border-style: dotted;">
 
 </div>
+
 <script>
 function onSignIn(googleUser) {
   var profile = googleUser.getBasicProfile();
   console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
   console.log('Name: ' + profile.getName());
-  document.getElementById("pfpimage").src = profile.getImageUrl()
+  document.getElementById("pfpimage").src = profile.getImageUrl();
   console.log('Image URL: ' + profile.getImageUrl());
   console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
 }
