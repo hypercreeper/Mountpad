@@ -306,7 +306,7 @@ function hideAccountBox() {
 
 <div contenteditable="false" class="nonselectable" style="height:80px; font-size: 30px; position: fixed; top: 1%; background-color: white; padding-top: 10px; padding-left: 10px; padding-right: 10px; padding-bottom: 10px; box-shadow: 0px 10px 20px gray;">
 <br>
-<img id="pfpimage" contenteditable="true" onclick="showAccountBox()" src="https://hypercreeper.github.io/Mountpad/account.png" style="position: absolute; top: 5px; left: 97%; height: 30px; width: 30px; cursor: pointer;">
+<img id="pfpimage" onclick="showAccountBox()" src="https://hypercreeper.github.io/Mountpad/account.png" style="position: absolute; top: 5px; left: 97%; height: 30px; width: 30px; cursor: pointer;">
 <div id="accbox" style="transition-duration: 0.2s; border-style: dotted; border-color: black; border-radius: 5px; border-width: 1px; height: 0px; width: 0px; position: absolute; top: 30px; left: 87%; background-color: white;">
 <h5 style="margin-top: 10px; text-align: center;" id="name" hidden>Name</h5>
 <div id="gsignin" hidden style="margin-left: 25px; margin-top: 50px;" class="g-signin2" data-onsuccess="onSignIn"></div>
@@ -388,7 +388,7 @@ min-height: 80%;
 }
 </style>
 <br>
-<div id="divy" autofocus style="outline: none; width: 100%; margin-top: 60px; border-color: black; border-width: 2px; border-style: dotted;">
+<div contenteditable="true" id="divy" autofocus style="outline: none; width: 100%; margin-top: 60px; border-color: black; border-width: 2px; border-style: dotted;">
 
 </div>
 
