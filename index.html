@@ -258,7 +258,7 @@ console.error("File type unknown: " + fileextension);
 function savetext(fileextension) {
 let data = document.getElementById("divy").innerHTML;
         const sFileName = document.getElementById("tf").value + fileextension;	   // The file to save the data.
-		const textToBLOB = new Blob([typecheck(fileextension, data)], { type: 'text/mdocx' });
+		const textToBLOB = new Blob([data], { type: 'text/mdocx' });
         let newLink = document.createElement("a");
         newLink.download = sFileName;
 
@@ -275,7 +275,7 @@ let data = document.getElementById("divy").innerHTML;
     }
 	function openfile(file) {
 	const reader = new FileReader();
-reader.onload = event => document.getElementById("divy").innerHTML = Decoder(event.target.result); // desired file content
+reader.onload = event => document.getElementById("divy").innerHTML = event.target.result; // desired file content
 reader.onerror = error => reject(error);
 document.getElementById("divy").innerHTML = reader.readAsText(file); // you could also read images and other binaries
 document.getElementById("divy").focus();
@@ -364,24 +364,29 @@ function hideAccountBox() {
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 <input id="tf" placeholder="enter file name here" onclick="this.select();" class="filename" title="File Name" value="New Document" style="width: 177px; height: 31px; border-style: solid; border-width: 1px; border-color: black; border-radius: 5px;">
 &nbsp;
-<button value="save" class="save" onclick="savetext('.mdocx')" title="Save File"><img src="https://raw.githubusercontent.com/hypercreeper/Mountpad/main/save.png"> as .mdocx</button>
+<button value="save" class="save" onclick="savetext('.mdocx')" title="Save File"><img src="https://raw.githubusercontent.com/hypercreeper/Mountpad/main/save.png">Save as .mdocx</button>
 &nbsp;
-<button value="save" class="save" onclick="savetext('.html')" title="Save File"><img src="https://raw.githubusercontent.com/hypercreeper/Mountpad/main/save.png"> as readonly .html</button>
+<button value="save" class="save" onclick="savetext('.html')" title="Save File"><img src="https://raw.githubusercontent.com/hypercreeper/Mountpad/main/save.png">Save as .html</button>
 &nbsp;
-<script src="https://apis.google.com/js/platform.js" async defer></script>
-<div class="g-savetodrive"
-   data-src="//example.com/path/to/myfile.pdf"
-   data-filename="My Statement.pdf"
-   data-sitename="My Company Name">
-</div>
+<button value="save" id="onlinesavebtn" disabled class="save" onclick="savetofirebase()" title="Save File Online"><img src="https://raw.githubusercontent.com/hypercreeper/Mountpad/main/add_to_drive.png"> Save Online</button>
 &nbsp;
 │
 &nbsp;
 <input type="file" id="ff" onchange="openfile(document.getElementById('ff').files[0])" accept=".mdocx" hidden>
-<button value="open" onclick="document.getElementById('ff').click();" title="Open File">
-<img src="https://raw.githubusercontent.com/hypercreeper/Mountpad/main/open.png"></button>
+<button value="open" class="save" onclick="document.getElementById('ff').click();" title="Open File">
+<img src="https://raw.githubusercontent.com/hypercreeper/Mountpad/main/open.png"> Open from Local</button>
+&nbsp;
+<button value="open" style="width: 148px;" class="save" disabled  id="onlineuploadbtn" onclick="executerud(); document.getElementById('file-picker-window').hidden = false;" title="Open File">
+<img src="https://raw.githubusercontent.com/hypercreeper/Mountpad/main/open.png"> Open from Online</button>
 </div>
 </div>
+<div id="window" style="position: absolute; background-color: white; border-radius: 5px; border-style: solid; border-color: black; border-width: 2px;" hidden></div>
+<div id="file-picker-window" hidden style="position: absolute; background-color: white; border-radius: 5px; border-style: solid; border-color: black; border-width: 2px;">
+<h4>Choose a file to upload</h4>
+<hr>
+<div id="files"></div>
+</div>
+<div id="message-window" style="position: absolute; background-color: white; border-radius: 5px; border-style: solid; border-color: black; border-width: 2px;" hidden></div>
 <style>
 input {
 outline: none;
@@ -394,25 +399,39 @@ border-style: inset;
 min-height: 80%;
 }
 </style>
-<br>
-<div contenteditable="true" id="divy" autofocus style="outline: none; width: 100%; margin-top: 60px; border-color: black; border-width: 2px; border-style: dotted;">
+<div contenteditable="true" id="divy" autofocus style="outline: none; width: 100%; margin-top: 80px; border-color: black; border-width: 2px; border-style: dotted;">
 
 </div>
 
 <script>
+var GName;
+var GEmail;
+var Gpfp;
+var GID;
 function onSignIn(googleUser) {
   var profile = googleUser.getBasicProfile();
   console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
   console.log('Name: ' + profile.getName());
+  document.getElementById("name").innerHTML = profile.getName();
   document.getElementById("pfpimage").src = profile.getImageUrl();
   console.log('Image URL: ' + profile.getImageUrl());
   console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+  GName = profile.getName();
+  GEmail = profile.getEmail();
+  Gpfp = profile.getImageUrl();
+  GID = profile.getId();
+  document.getElementById("onlinesavebtn").disabled = false;
+  document.getElementById("onlineuploadbtn").disabled = false;
+}
+function savetofirebase() {
+	executewud(GID, GName, GEmail, document.getElementById("divy").innerHTML);
 }
 </script>
 	<script type="module">
   // Import the functions you need from the SDKs you need
   import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.7/firebase-app.js";
   import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.7/firebase-analytics.js";
+  import { getDatabase, ref, set, child, get } from "https://www.gstatic.com/firebasejs/9.6.7/firebase-database.js";
   // TODO: Add SDKs for Firebase products that you want to use
   // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -421,6 +440,7 @@ function onSignIn(googleUser) {
   const firebaseConfig = {
     apiKey: "AIzaSyBFblcdoUG-GkmWu1a0GjOmkn9V3JjMhQ4",
     authDomain: "notepad-dab3f.firebaseapp.com",
+	databaseURL: "https://notepad-dab3f-default-rtdb.firebaseio.com",
     projectId: "notepad-dab3f",
     storageBucket: "notepad-dab3f.appspot.com",
     messagingSenderId: "106320186250",
@@ -431,6 +451,110 @@ function onSignIn(googleUser) {
   // Initialize Firebase
   const app = initializeApp(firebaseConfig);
   const analytics = getAnalytics(app);
+  const database = getDatabase(app);
+  var documentcount = 0;
+  function executewud(userId, name, email, documentData) {
+	  
+  }
+  function writeUserData(userId, name, email, documentData) {
+	  const db = database;
+	  var currentpath = {};
+	  var currentrootpath = {};
+	  var currentdocuments = {};
+	  const dbRef = ref(getDatabase());
+	  get(child(dbRef, userId)).then((snapshot) => {
+  if (snapshot.exists()) {
+	  console.log("Database Read");
+    console.log(snapshot.val());
+	currentpath = snapshot.val();
+  } else {
+    console.log("No data available");
+  }
+}).catch((error) => {
+  console.error(error);
+});
+get(child(dbRef, "/")).then((snapshot) => {
+  if (snapshot.exists()) {
+	  console.log("Database Read");
+    console.log(snapshot.val());
+	currentrootpath = snapshot.val();
+  } else {
+    console.log("No data available");
+  }
+}).catch((error) => {
+  console.error(error);
+});
+get(child(dbRef, "/" + userId + "/Documents")).then((snapshot) => {
+  if (snapshot.exists()) {
+	  console.log("Database Read");
+    console.log(snapshot.val());
+	currentdocuments = snapshot.val();
+  } else {
+    console.log("No data available");
+  }
+}).catch((error) => {
+  console.error(error);
+});
+	  setTimeout(function() {
+	  var path = {};
+		path[document.getElementById("tf").value] = {
+			  DocumentName: document.getElementById("tf").value,
+			  Data: documentData,
+			  Email: email
+		  };
+		  var pathno2 = {};
+		  console.log("path");
+		  console.log(path);
+		  console.log("currentpath");
+		  console.log(currentpath);
+		  var newpath = {};
+		  var documentlist = {};
+		  documentcount++;
+		  documentlist = {
+				Document1: document.getElementById("tf").value,
+				...currentdocuments
+		  };
+		  documentlist["Document" + documentcount] = document.getElementById("tf").value;
+		  newpath[userId] = {
+			  ...path,
+			  ...currentpath,
+			  Documents: documentlist
+		  };
+		  var newnewpath = {
+			  ...currentrootpath,
+			  ...newpath
+		  }
+	  set(ref(db, "/"), newnewpath);
+    }, 2000);
+  }
+  window.executewud = function(userId, name, email, documentData){
+      writeUserData(userId, name, email, documentData);
+    }
+	function executerud() {
+		
+	}
+	function readUserData() {
+		const db = database;
+		var documents = {};
+		const dbRef = ref(getDatabase());
+		get(child(dbRef, GID + "/Documents")).then((snapshot) => {
+			if (snapshot.exists()) {
+			console.log("Database Read");
+			console.log(snapshot.val());
+			documents = snapshot.val();
+			} else {
+			console.log("No data available");
+			}
+		}).catch((error) => {
+			console.error(error);
+		});
+	var d = document.createElement("div");
+	d.innerHTML = Object.keys(documents).length;
+	document.getElementById("files").appendChild(d);
+	}
+	window.executerud = function(){
+      readUserData();
+    }
 </script>
 </body>
 </html>
