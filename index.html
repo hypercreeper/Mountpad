@@ -28,6 +28,14 @@ height: 33px;
 width: 145px;
 margin-top: 10px;
 }
+button.uploadbtn {
+height: 33px;
+width: 145px;
+margin-top: 10px;
+}
+button:active {
+	background-color: gray;
+}
 input {
 font-family: 'Fredoka', sans-serif;
 font-weight: 800;
@@ -191,9 +199,6 @@ mdocx = mdocx.replace('<div style="text-align: center;">','[{j}]');
 mdocx = mdocx.replace('<div style="text-align: justify;">','[|j|]');
 mdocx = mdocx.replace('<div style="text-align: right;">','[j>]');
 mdocx = mdocx.replace('</div>','[-j]');
-var fontsize = '<font size="">';
-mdocx = mdocx.replace('<font size="">','[t:' + fontsize.substring(13,14));
-mdocx = mdocx.replace('</font>','[-t]');
 <!-- mdocx = mdocx.replace('',''); -->
 <!-- mdocx = mdocx.replace('',''); -->
 <!-- mdocx = mdocx.replace('',''); -->
@@ -258,7 +263,7 @@ console.error("File type unknown: " + fileextension);
 function savetext(fileextension) {
 let data = document.getElementById("divy").innerHTML;
         const sFileName = document.getElementById("tf").value + fileextension;	   // The file to save the data.
-		const textToBLOB = new Blob([data], { type: 'text/mdocx' });
+		const textToBLOB = new Blob([typecheck(fileextension, data)], { type: 'text/mdocx' });
         let newLink = document.createElement("a");
         newLink.download = sFileName;
 
@@ -275,7 +280,7 @@ let data = document.getElementById("divy").innerHTML;
     }
 	function openfile(file) {
 	const reader = new FileReader();
-reader.onload = event => document.getElementById("divy").innerHTML = event.target.result; // desired file content
+reader.onload = event => document.getElementById("divy").innerHTML = Decoder(event.target.result); // desired file content
 reader.onerror = error => reject(error);
 document.getElementById("divy").innerHTML = reader.readAsText(file); // you could also read images and other binaries
 document.getElementById("divy").focus();
@@ -302,6 +307,10 @@ function hideAccountBox() {
 	document.getElementById("accbox").style.height = "0px";
 	document.getElementById("accbox").style.width = "0px";
 }
+var data;
+var documents = {};
+var selectedDocument;
+var s;
 </script>
 
 <div contenteditable="false" class="nonselectable" style="height:80px; font-size: 30px; position: fixed; top: 1%; background-color: white; padding-top: 10px; padding-left: 10px; padding-right: 10px; padding-bottom: 10px; box-shadow: 0px 10px 20px gray;">
@@ -310,6 +319,7 @@ function hideAccountBox() {
 <div id="accbox" style="transition-duration: 0.2s; border-style: dotted; border-color: black; border-radius: 5px; border-width: 1px; height: 0px; width: 0px; position: absolute; top: 30px; left: 87%; background-color: white;">
 <h5 style="margin-top: 10px; text-align: center;" id="name" hidden>Name</h5>
 <div id="gsignin" hidden style="margin-left: 25px; margin-top: 50px;" class="g-signin2" data-onsuccess="onSignIn"></div>
+
 </div>
 <div style="margin-top: 15px;">
 <button title="Undo" value="<-" onclick="un()"><img src="https://hypercreeper.github.io/Mountpad/undo.png"></button>
@@ -382,7 +392,7 @@ function hideAccountBox() {
 </div>
 <div id="window" style="position: absolute; background-color: white; border-radius: 5px; border-style: solid; border-color: black; border-width: 2px;" hidden></div>
 <div id="file-picker-window" hidden style="position: absolute; background-color: white; border-radius: 5px; border-style: solid; border-color: black; border-width: 2px;">
-<h4>Choose a file to upload</h4>
+<h4>Choose a file to upload <a onclick="document.getElementById('file-picker-window').hidden = true;" style="color: red; cursor: pointer;">X</a></h4>
 <hr>
 <div id="files"></div>
 </div>
@@ -400,7 +410,6 @@ min-height: 80%;
 }
 </style>
 <div contenteditable="true" id="divy" autofocus style="outline: none; width: 100%; margin-top: 80px; border-color: black; border-width: 2px; border-style: dotted;">
-
 </div>
 
 <script>
@@ -452,7 +461,7 @@ function savetofirebase() {
   const app = initializeApp(firebaseConfig);
   const analytics = getAnalytics(app);
   const database = getDatabase(app);
-  var documentcount = 0;
+  var documentcount = 1;
   function executewud(userId, name, email, documentData) {
 	  
   }
@@ -499,7 +508,7 @@ get(child(dbRef, "/" + userId + "/Documents")).then((snapshot) => {
 	  var path = {};
 		path[document.getElementById("tf").value] = {
 			  DocumentName: document.getElementById("tf").value,
-			  Data: documentData,
+			  Data: Encoder(documentData),
 			  Email: email
 		  };
 		  var pathno2 = {};
@@ -509,7 +518,15 @@ get(child(dbRef, "/" + userId + "/Documents")).then((snapshot) => {
 		  console.log(currentpath);
 		  var newpath = {};
 		  var documentlist = {};
-		  documentcount++;
+		  documentcount = Object.keys(currentdocuments).length;
+		  console.warn(documentcount);
+		  if(documentcount == 0) {
+			  documentcount++;
+		  }
+		  else {
+			  documentcount++;
+		  }
+		  console.warn(documentcount);
 		  documentlist = {
 				Document1: document.getElementById("tf").value,
 				...currentdocuments
@@ -525,6 +542,8 @@ get(child(dbRef, "/" + userId + "/Documents")).then((snapshot) => {
 			  ...newpath
 		  }
 	  set(ref(db, "/"), newnewpath);
+	  document.getElementById("onlinesavebtn").style.backgroundColor = "#00ff00";
+	  setTimeout(function() {document.getElementById("onlinesavebtn").style.backgroundColor = ""}, 1000);
     }, 2000);
   }
   window.executewud = function(userId, name, email, documentData){
@@ -535,8 +554,19 @@ get(child(dbRef, "/" + userId + "/Documents")).then((snapshot) => {
 	}
 	function readUserData() {
 		const db = database;
-		var documents = {};
+		
 		const dbRef = ref(getDatabase());
+		get(child(dbRef, GID)).then((snapshot) => {
+			if (snapshot.exists()) {
+			console.log("Database Read");
+			console.log(snapshot.val());
+			selectedDocument = snapshot.val();
+			} else {
+			console.log("No data available");
+			}
+		}).catch((error) => {
+			console.error(error);
+		});
 		get(child(dbRef, GID + "/Documents")).then((snapshot) => {
 			if (snapshot.exists()) {
 			console.log("Database Read");
@@ -548,13 +578,53 @@ get(child(dbRef, "/" + userId + "/Documents")).then((snapshot) => {
 		}).catch((error) => {
 			console.error(error);
 		});
-	var d = document.createElement("div");
-	d.innerHTML = Object.keys(documents).length;
+		setTimeout(function() {
+			for(var i = 0; i < Object.values(documents).length; i++) {
+				s = i;
+	var d = document.createElement("button");
+	d.className = "uploadbtn";
+	d.innerHTML = ReadAllDocuments(Object.values(documents), i);
+	d.onclick = function() {
+		document.getElementById("file-picker-window").hidden = true;
+		var documentss = selectedDocument[this.innerHTML];
+		console.error(selectedDocument[this.innerHTML]);
+		var documentsss;
+		console.warn(selectedDocument);
+		console.warn(Object.keys(documentss));
+		documentsss = documentss;
+		console.log(documentsss);
+		console.warn("Database Path: " + GID + "/" + this.innerHTML);
+		console.warn(documentsss["Data"]);
+		get(child(dbRef, GID + "/" + this.innerHTML)).then((snapshot) => {
+			if (snapshot.exists()) {
+			console.log("Database Read");
+			console.log(snapshot.val());
+			documentsss = snapshot.val();
+			} else {
+			console.log("No data available");
+			}
+		}).catch((error) => {
+			console.error(error);
+		});
+		document.getElementById("divy").innerHTML = Decoder(documentsss["Data"]);
+		document.getElementById("tf").value = documentsss["DocumentName"];
+	}
 	document.getElementById("files").appendChild(d);
+	var br = document.createElement("br");
+	document.getElementById("files").appendChild(br);
+			}
+		},2000);
 	}
 	window.executerud = function(){
-      readUserData();
+		document.getElementById("files").remove();
+		var h = document.createElement("div");
+		h.id = "files";
+		document.getElementById("file-picker-window").appendChild(h);
+		readUserData();
     }
+	function ReadAllDocuments(object, index) {
+		return object[index]
+	}
 </script>
 </body>
 </html>
