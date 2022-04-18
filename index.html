@@ -1,12 +1,22 @@
 <html>
 <head style="outline: none;">
+<meta http-equiv="Access-Control-Allow-Origin" content="*">
 <title>Mountpad</title>
-<link href="https://hypercreeper.github.io/Mountpad/icon.png" rel="icon">
+<link href="icon.png" rel="icon">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300&display=swap" rel="stylesheet">
 <script src="https://apis.google.com/js/platform.js" async defer></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <meta name="google-signin-client_id" content="106320186250-deif6nao1t901htl9k6da5tflhpdkvq9.apps.googleusercontent.com">
+<style>
+.onhover:hover {
+  color: blue;
+  }
+    .onhover:active {
+        color: darkblue;
+    }
+</style>
 <style>
 button {
 font-family: 'Fredoka', sans-serif;
@@ -57,6 +67,10 @@ user-drag: none;
     user-select: none;
 }
 </style>
+<script>
+var filter;
+var filterhc;
+</script>
 </head>
 <br><br>
 <body style="font-family: 'Fredoka', sans-serif;" >
@@ -134,8 +148,9 @@ document.getElementById("divy").focus();
 var col = "";
 function tc(ev) {
 col = ev.target.value;
+document.getElementById("startconversion").click();
 document.execCommand("foreColor", false, ev.target.value);
-document.getElementById("tcbtn").style.backgroundColor = col;
+document.getElementById("tcimg").style = filter;
 document.getElementById("divy").focus();
 }
 function bp() {
@@ -149,8 +164,9 @@ document.getElementById("divy").focus();
 var hcol = "";
 function hc(ev) {
 hcol = ev.target.value;
+document.getElementById("startconversiontwo").click();
 document.execCommand("hiliteColor", false, ev.target.value);
-document.getElementById("hcbtn").style.backgroundColor = hcol;
+document.getElementById("hcimg").style = filterhc;
 document.getElementById("divy").focus();
 }
 function fn() {
@@ -160,6 +176,8 @@ document.getElementById("divy").focus();
 }
 function cl(ev) {
 document.execCommand("removeFormat");
+document.getElementById("tcimg").style = "";
+document.getElementById("hcimg").style = "";
 document.getElementById("divy").focus();
 }
 function inhtml() {
@@ -286,6 +304,16 @@ document.getElementById("divy").innerHTML = reader.readAsText(file); // you coul
 document.getElementById("divy").focus();
 document.getElementById("tf").value = document.getElementById("ff").files[0].name.replace('.mdocx','');
 }
+function uploadFile(file) {
+var filedataurl;
+console.log(file);
+console.log(filedataurl);
+document.getElementById("divy").innerHTML += `
+<div contenteditable="false" style="border-style: solid; border-radius: 10px; min-height: 100px; min-width: 500px;">
+  <img contenteditable="false" src="file.png" id="imgpng" style="height: 75px; width: 75px; margin-top: 10px; margin-left: 20px;display: inline-block;vertical-align: middle;">
+<a contenteditable="false" style="display: inline-block; vertical-align: middle;margin-top: 10px;" class="onhover" download="" href="${URL.createObjectURL(file)}">${file.name}</a>
+</div><br>`;
+}
 var accbox = document.getElementById("accbox");
 var menuOpen = false;
 function showAccountBox() {
@@ -313,80 +341,740 @@ var selectedDocument;
 var s;
 </script>
 
+<script>
+'use strict';
+
+class Colorhc {
+  constructor(r, g, b) {
+    this.set(r, g, b);
+  }
+  
+  toString() {
+    return `rgb(${Math.round(this.r)}, ${Math.round(this.g)}, ${Math.round(this.b)})`;
+  }
+
+  set(r, g, b) {
+    this.r = this.clamp(r);
+    this.g = this.clamp(g);
+    this.b = this.clamp(b);
+  }
+
+  hueRotate(angle = 0) {
+    angle = angle / 180 * Math.PI;
+    const sin = Math.sin(angle);
+    const cos = Math.cos(angle);
+
+    this.multiply([
+      0.213 + cos * 0.787 - sin * 0.213,
+      0.715 - cos * 0.715 - sin * 0.715,
+      0.072 - cos * 0.072 + sin * 0.928,
+      0.213 - cos * 0.213 + sin * 0.143,
+      0.715 + cos * 0.285 + sin * 0.140,
+      0.072 - cos * 0.072 - sin * 0.283,
+      0.213 - cos * 0.213 - sin * 0.787,
+      0.715 - cos * 0.715 + sin * 0.715,
+      0.072 + cos * 0.928 + sin * 0.072,
+    ]);
+  }
+
+  grayscale(value = 1) {
+    this.multiply([
+      0.2126 + 0.7874 * (1 - value),
+      0.7152 - 0.7152 * (1 - value),
+      0.0722 - 0.0722 * (1 - value),
+      0.2126 - 0.2126 * (1 - value),
+      0.7152 + 0.2848 * (1 - value),
+      0.0722 - 0.0722 * (1 - value),
+      0.2126 - 0.2126 * (1 - value),
+      0.7152 - 0.7152 * (1 - value),
+      0.0722 + 0.9278 * (1 - value),
+    ]);
+  }
+
+  sepia(value = 1) {
+    this.multiply([
+      0.393 + 0.607 * (1 - value),
+      0.769 - 0.769 * (1 - value),
+      0.189 - 0.189 * (1 - value),
+      0.349 - 0.349 * (1 - value),
+      0.686 + 0.314 * (1 - value),
+      0.168 - 0.168 * (1 - value),
+      0.272 - 0.272 * (1 - value),
+      0.534 - 0.534 * (1 - value),
+      0.131 + 0.869 * (1 - value),
+    ]);
+  }
+
+  saturate(value = 1) {
+    this.multiply([
+      0.213 + 0.787 * value,
+      0.715 - 0.715 * value,
+      0.072 - 0.072 * value,
+      0.213 - 0.213 * value,
+      0.715 + 0.285 * value,
+      0.072 - 0.072 * value,
+      0.213 - 0.213 * value,
+      0.715 - 0.715 * value,
+      0.072 + 0.928 * value,
+    ]);
+  }
+
+  multiply(matrix) {
+    const newR = this.clamp(this.r * matrix[0] + this.g * matrix[1] + this.b * matrix[2]);
+    const newG = this.clamp(this.r * matrix[3] + this.g * matrix[4] + this.b * matrix[5]);
+    const newB = this.clamp(this.r * matrix[6] + this.g * matrix[7] + this.b * matrix[8]);
+    this.r = newR;
+    this.g = newG;
+    this.b = newB;
+  }
+
+  brightness(value = 1) {
+    this.linear(value);
+  }
+  contrast(value = 1) {
+    this.linear(value, -(0.5 * value) + 0.5);
+  }
+
+  linear(slope = 1, intercept = 0) {
+    this.r = this.clamp(this.r * slope + intercept * 255);
+    this.g = this.clamp(this.g * slope + intercept * 255);
+    this.b = this.clamp(this.b * slope + intercept * 255);
+  }
+
+  invert(value = 1) {
+    this.r = this.clamp((value + this.r / 255 * (1 - 2 * value)) * 255);
+    this.g = this.clamp((value + this.g / 255 * (1 - 2 * value)) * 255);
+    this.b = this.clamp((value + this.b / 255 * (1 - 2 * value)) * 255);
+  }
+
+  hsl() {
+    // Code taken from https://stackoverflow.com/a/9493060/2688027, licensed under CC BY-SA.
+    const r = this.r / 255;
+    const g = this.g / 255;
+    const b = this.b / 255;
+    const max = Math.max(r, g, b);
+    const min = Math.min(r, g, b);
+    let h, s, l = (max + min) / 2;
+
+    if (max === min) {
+      h = s = 0;
+    } else {
+      const d = max - min;
+      s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+      switch (max) {
+        case r:
+          h = (g - b) / d + (g < b ? 6 : 0);
+          break;
+
+        case g:
+          h = (b - r) / d + 2;
+          break;
+
+        case b:
+          h = (r - g) / d + 4;
+          break;
+      }
+      h /= 6;
+    }
+
+    return {
+      h: h * 100,
+      s: s * 100,
+      l: l * 100,
+    };
+  }
+
+  clamp(value) {
+    if (value > 255) {
+      value = 255;
+    } else if (value < 0) {
+      value = 0;
+    }
+    return value;
+  }
+}
+
+class Solverhc {
+  constructor(target, baseColor) {
+    this.target = target;
+    this.targetHSL = target.hsl();
+    this.reusedColor = new Colorhc(0, 0, 0);
+  }
+
+  solve() {
+    const result = this.solveNarrow(this.solveWide());
+    return {
+      values: result.values,
+      loss: result.loss,
+      filter: this.css(result.values),
+    };
+  }
+
+  solveWide() {
+    const A = 5;
+    const c = 15;
+    const a = [60, 180, 18000, 600, 1.2, 1.2];
+
+    let best = { loss: Infinity };
+    for (let i = 0; best.loss > 25 && i < 3; i++) {
+      const initial = [50, 20, 3750, 50, 100, 100];
+      const result = this.spsa(A, a, c, initial, 1000);
+      if (result.loss < best.loss) {
+        best = result;
+      }
+    }
+    return best;
+  }
+
+  solveNarrow(wide) {
+    const A = wide.loss;
+    const c = 2;
+    const A1 = A + 1;
+    const a = [0.25 * A1, 0.25 * A1, A1, 0.25 * A1, 0.2 * A1, 0.2 * A1];
+    return this.spsa(A, a, c, wide.values, 500);
+  }
+
+  spsa(A, a, c, values, iters) {
+    const alpha = 1;
+    const gamma = 0.16666666666666666;
+
+    let best = null;
+    let bestLoss = Infinity;
+    const deltas = new Array(6);
+    const highArgs = new Array(6);
+    const lowArgs = new Array(6);
+
+    for (let k = 0; k < iters; k++) {
+      const ck = c / Math.pow(k + 1, gamma);
+      for (let i = 0; i < 6; i++) {
+        deltas[i] = Math.random() > 0.5 ? 1 : -1;
+        highArgs[i] = values[i] + ck * deltas[i];
+        lowArgs[i] = values[i] - ck * deltas[i];
+      }
+
+      const lossDiff = this.loss(highArgs) - this.loss(lowArgs);
+      for (let i = 0; i < 6; i++) {
+        const g = lossDiff / (2 * ck) * deltas[i];
+        const ak = a[i] / Math.pow(A + k + 1, alpha);
+        values[i] = fix(values[i] - ak * g, i);
+      }
+
+      const loss = this.loss(values);
+      if (loss < bestLoss) {
+        best = values.slice(0);
+        bestLoss = loss;
+      }
+    }
+    return { values: best, loss: bestLoss };
+
+    function fix(value, idx) {
+      let max = 100;
+      if (idx === 2 /* saturate */) {
+        max = 7500;
+      } else if (idx === 4 /* brightness */ || idx === 5 /* contrast */) {
+        max = 200;
+      }
+
+      if (idx === 3 /* hue-rotate */) {
+        if (value > max) {
+          value %= max;
+        } else if (value < 0) {
+          value = max + value % max;
+        }
+      } else if (value < 0) {
+        value = 0;
+      } else if (value > max) {
+        value = max;
+      }
+      return value;
+    }
+  }
+
+  loss(filters) {
+    // Argument is array of percentages.
+    const color = this.reusedColor;
+    color.set(0, 0, 0);
+
+    color.invert(filters[0] / 100);
+    color.sepia(filters[1] / 100);
+    color.saturate(filters[2] / 100);
+    color.hueRotate(filters[3] * 3.6);
+    color.brightness(filters[4] / 100);
+    color.contrast(filters[5] / 100);
+
+    const colorHSL = color.hsl();
+    return (
+      Math.abs(color.r - this.target.r) +
+      Math.abs(color.g - this.target.g) +
+      Math.abs(color.b - this.target.b) +
+      Math.abs(colorHSL.h - this.targetHSL.h) +
+      Math.abs(colorHSL.s - this.targetHSL.s) +
+      Math.abs(colorHSL.l - this.targetHSL.l)
+    );
+  }
+
+  css(filters) {
+    function fmt(idx, multiplier = 1) {
+      return Math.round(filters[idx] * multiplier);
+    }
+    return `filter: invert(${fmt(0)}%) sepia(${fmt(1)}%) saturate(${fmt(2)}%) hue-rotate(${fmt(3, 3.6)}deg) brightness(${fmt(4)}%) contrast(${fmt(5)}%);`;
+  }
+}
+
+function hexToRgb(hex) {
+  // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
+  const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+  hex = hex.replace(shorthandRegex, (m, r, g, b) => {
+    return r + r + g + g + b + b;
+  });
+
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result
+    ? [
+      parseInt(result[1], 16),
+      parseInt(result[2], 16),
+      parseInt(result[3], 16),
+    ]
+    : null;
+}
+
+$(document).ready(() => {
+  $('button#startconversiontwo').click(() => {
+    const rgb = hexToRgb($('input#hc').val());
+    if (rgb.length !== 3) {
+      alert('Invalid format!');
+      return;
+    }
+
+    const color = new Colorhc(rgb[0], rgb[1], rgb[2]);
+    const solver = new Solverhc(color);
+    const result = solver.solve();
+
+    let lossMsg;
+    if (result.loss < 1) {
+      lossMsg = 'This is a perfect result.';
+    } else if (result.loss < 5) {
+      lossMsg = 'The is close enough.';
+    } else if (result.loss < 15) {
+      lossMsg = 'The color is somewhat off. Consider running it again.';
+    } else {
+      lossMsg = 'The color is extremely off. Run it again!';
+    }
+
+    $('.realPixel').css('background-color', color.toString());
+    $('.filterPixel').attr('style', result.filter);
+    filterhc = result.filter;
+		console.warn(filterhc);
+    $('.lossDetail').html(`Loss: ${result.loss.toFixed(1)}. <b>${lossMsg}</b>`);
+  });
+});
+</script>
+<script>
+'use strict';
+
+class Color {
+  constructor(r, g, b) {
+    this.set(r, g, b);
+  }
+  
+  toString() {
+    return `rgb(${Math.round(this.r)}, ${Math.round(this.g)}, ${Math.round(this.b)})`;
+  }
+
+  set(r, g, b) {
+    this.r = this.clamp(r);
+    this.g = this.clamp(g);
+    this.b = this.clamp(b);
+  }
+
+  hueRotate(angle = 0) {
+    angle = angle / 180 * Math.PI;
+    const sin = Math.sin(angle);
+    const cos = Math.cos(angle);
+
+    this.multiply([
+      0.213 + cos * 0.787 - sin * 0.213,
+      0.715 - cos * 0.715 - sin * 0.715,
+      0.072 - cos * 0.072 + sin * 0.928,
+      0.213 - cos * 0.213 + sin * 0.143,
+      0.715 + cos * 0.285 + sin * 0.140,
+      0.072 - cos * 0.072 - sin * 0.283,
+      0.213 - cos * 0.213 - sin * 0.787,
+      0.715 - cos * 0.715 + sin * 0.715,
+      0.072 + cos * 0.928 + sin * 0.072,
+    ]);
+  }
+
+  grayscale(value = 1) {
+    this.multiply([
+      0.2126 + 0.7874 * (1 - value),
+      0.7152 - 0.7152 * (1 - value),
+      0.0722 - 0.0722 * (1 - value),
+      0.2126 - 0.2126 * (1 - value),
+      0.7152 + 0.2848 * (1 - value),
+      0.0722 - 0.0722 * (1 - value),
+      0.2126 - 0.2126 * (1 - value),
+      0.7152 - 0.7152 * (1 - value),
+      0.0722 + 0.9278 * (1 - value),
+    ]);
+  }
+
+  sepia(value = 1) {
+    this.multiply([
+      0.393 + 0.607 * (1 - value),
+      0.769 - 0.769 * (1 - value),
+      0.189 - 0.189 * (1 - value),
+      0.349 - 0.349 * (1 - value),
+      0.686 + 0.314 * (1 - value),
+      0.168 - 0.168 * (1 - value),
+      0.272 - 0.272 * (1 - value),
+      0.534 - 0.534 * (1 - value),
+      0.131 + 0.869 * (1 - value),
+    ]);
+  }
+
+  saturate(value = 1) {
+    this.multiply([
+      0.213 + 0.787 * value,
+      0.715 - 0.715 * value,
+      0.072 - 0.072 * value,
+      0.213 - 0.213 * value,
+      0.715 + 0.285 * value,
+      0.072 - 0.072 * value,
+      0.213 - 0.213 * value,
+      0.715 - 0.715 * value,
+      0.072 + 0.928 * value,
+    ]);
+  }
+
+  multiply(matrix) {
+    const newR = this.clamp(this.r * matrix[0] + this.g * matrix[1] + this.b * matrix[2]);
+    const newG = this.clamp(this.r * matrix[3] + this.g * matrix[4] + this.b * matrix[5]);
+    const newB = this.clamp(this.r * matrix[6] + this.g * matrix[7] + this.b * matrix[8]);
+    this.r = newR;
+    this.g = newG;
+    this.b = newB;
+  }
+
+  brightness(value = 1) {
+    this.linear(value);
+  }
+  contrast(value = 1) {
+    this.linear(value, -(0.5 * value) + 0.5);
+  }
+
+  linear(slope = 1, intercept = 0) {
+    this.r = this.clamp(this.r * slope + intercept * 255);
+    this.g = this.clamp(this.g * slope + intercept * 255);
+    this.b = this.clamp(this.b * slope + intercept * 255);
+  }
+
+  invert(value = 1) {
+    this.r = this.clamp((value + this.r / 255 * (1 - 2 * value)) * 255);
+    this.g = this.clamp((value + this.g / 255 * (1 - 2 * value)) * 255);
+    this.b = this.clamp((value + this.b / 255 * (1 - 2 * value)) * 255);
+  }
+
+  hsl() {
+    // Code taken from https://stackoverflow.com/a/9493060/2688027, licensed under CC BY-SA.
+    const r = this.r / 255;
+    const g = this.g / 255;
+    const b = this.b / 255;
+    const max = Math.max(r, g, b);
+    const min = Math.min(r, g, b);
+    let h, s, l = (max + min) / 2;
+
+    if (max === min) {
+      h = s = 0;
+    } else {
+      const d = max - min;
+      s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+      switch (max) {
+        case r:
+          h = (g - b) / d + (g < b ? 6 : 0);
+          break;
+
+        case g:
+          h = (b - r) / d + 2;
+          break;
+
+        case b:
+          h = (r - g) / d + 4;
+          break;
+      }
+      h /= 6;
+    }
+
+    return {
+      h: h * 100,
+      s: s * 100,
+      l: l * 100,
+    };
+  }
+
+  clamp(value) {
+    if (value > 255) {
+      value = 255;
+    } else if (value < 0) {
+      value = 0;
+    }
+    return value;
+  }
+}
+
+class Solver {
+  constructor(target, baseColor) {
+    this.target = target;
+    this.targetHSL = target.hsl();
+    this.reusedColor = new Color(0, 0, 0);
+  }
+
+  solve() {
+    const result = this.solveNarrow(this.solveWide());
+    return {
+      values: result.values,
+      loss: result.loss,
+      filter: this.css(result.values),
+    };
+  }
+
+  solveWide() {
+    const A = 5;
+    const c = 15;
+    const a = [60, 180, 18000, 600, 1.2, 1.2];
+
+    let best = { loss: Infinity };
+    for (let i = 0; best.loss > 25 && i < 3; i++) {
+      const initial = [50, 20, 3750, 50, 100, 100];
+      const result = this.spsa(A, a, c, initial, 1000);
+      if (result.loss < best.loss) {
+        best = result;
+      }
+    }
+    return best;
+  }
+
+  solveNarrow(wide) {
+    const A = wide.loss;
+    const c = 2;
+    const A1 = A + 1;
+    const a = [0.25 * A1, 0.25 * A1, A1, 0.25 * A1, 0.2 * A1, 0.2 * A1];
+    return this.spsa(A, a, c, wide.values, 500);
+  }
+
+  spsa(A, a, c, values, iters) {
+    const alpha = 1;
+    const gamma = 0.16666666666666666;
+
+    let best = null;
+    let bestLoss = Infinity;
+    const deltas = new Array(6);
+    const highArgs = new Array(6);
+    const lowArgs = new Array(6);
+
+    for (let k = 0; k < iters; k++) {
+      const ck = c / Math.pow(k + 1, gamma);
+      for (let i = 0; i < 6; i++) {
+        deltas[i] = Math.random() > 0.5 ? 1 : -1;
+        highArgs[i] = values[i] + ck * deltas[i];
+        lowArgs[i] = values[i] - ck * deltas[i];
+      }
+
+      const lossDiff = this.loss(highArgs) - this.loss(lowArgs);
+      for (let i = 0; i < 6; i++) {
+        const g = lossDiff / (2 * ck) * deltas[i];
+        const ak = a[i] / Math.pow(A + k + 1, alpha);
+        values[i] = fix(values[i] - ak * g, i);
+      }
+
+      const loss = this.loss(values);
+      if (loss < bestLoss) {
+        best = values.slice(0);
+        bestLoss = loss;
+      }
+    }
+    return { values: best, loss: bestLoss };
+
+    function fix(value, idx) {
+      let max = 100;
+      if (idx === 2 /* saturate */) {
+        max = 7500;
+      } else if (idx === 4 /* brightness */ || idx === 5 /* contrast */) {
+        max = 200;
+      }
+
+      if (idx === 3 /* hue-rotate */) {
+        if (value > max) {
+          value %= max;
+        } else if (value < 0) {
+          value = max + value % max;
+        }
+      } else if (value < 0) {
+        value = 0;
+      } else if (value > max) {
+        value = max;
+      }
+      return value;
+    }
+  }
+
+  loss(filters) {
+    // Argument is array of percentages.
+    const color = this.reusedColor;
+    color.set(0, 0, 0);
+
+    color.invert(filters[0] / 100);
+    color.sepia(filters[1] / 100);
+    color.saturate(filters[2] / 100);
+    color.hueRotate(filters[3] * 3.6);
+    color.brightness(filters[4] / 100);
+    color.contrast(filters[5] / 100);
+
+    const colorHSL = color.hsl();
+    return (
+      Math.abs(color.r - this.target.r) +
+      Math.abs(color.g - this.target.g) +
+      Math.abs(color.b - this.target.b) +
+      Math.abs(colorHSL.h - this.targetHSL.h) +
+      Math.abs(colorHSL.s - this.targetHSL.s) +
+      Math.abs(colorHSL.l - this.targetHSL.l)
+    );
+  }
+
+  css(filters) {
+    function fmt(idx, multiplier = 1) {
+      return Math.round(filters[idx] * multiplier);
+    }
+    return `filter: invert(${fmt(0)}%) sepia(${fmt(1)}%) saturate(${fmt(2)}%) hue-rotate(${fmt(3, 3.6)}deg) brightness(${fmt(4)}%) contrast(${fmt(5)}%);`;
+  }
+}
+
+function hexToRgb(hex) {
+  // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
+  const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+  hex = hex.replace(shorthandRegex, (m, r, g, b) => {
+    return r + r + g + g + b + b;
+  });
+
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result
+    ? [
+      parseInt(result[1], 16),
+      parseInt(result[2], 16),
+      parseInt(result[3], 16),
+    ]
+    : null;
+}
+
+$(document).ready(() => {
+  $('button#startconversion').click(() => {
+    const rgb = hexToRgb($('input#tc').val());
+    if (rgb.length !== 3) {
+      alert('Invalid format!');
+      return;
+    }
+
+    const color = new Color(rgb[0], rgb[1], rgb[2]);
+    const solver = new Solver(color);
+    const result = solver.solve();
+
+    let lossMsg;
+    if (result.loss < 1) {
+      lossMsg = 'This is a perfect result.';
+    } else if (result.loss < 5) {
+      lossMsg = 'The is close enough.';
+    } else if (result.loss < 15) {
+      lossMsg = 'The color is somewhat off. Consider running it again.';
+    } else {
+      lossMsg = 'The color is extremely off. Run it again!';
+    }
+
+    $('.realPixel').css('background-color', color.toString());
+    $('.filterPixel').attr('style', result.filter);
+    filter = result.filter;
+		console.log(filter);
+    $('.lossDetail').html(`Loss: ${result.loss.toFixed(1)}. <b>${lossMsg}</b>`);
+  });
+});
+</script>
 <div contenteditable="false" class="nonselectable" style="height:80px; font-size: 30px; position: fixed; top: 1%; background-color: white; padding-top: 10px; padding-left: 10px; padding-right: 10px; padding-bottom: 10px; box-shadow: 0px 10px 20px gray; width: 98%;">
 <br>
-<img id="pfpimage" onclick="showAccountBox()" src="https://hypercreeper.github.io/Mountpad/account.png" style="position: absolute; top: 5px; left: 97%; height: 30px; width: 30px; cursor: pointer;">
+<img id="pfpimage" onclick="showAccountBox()" src="account.png" style="position: absolute; top: 5px; left: 97%; height: 30px; width: 30px; cursor: pointer;">
 <div id="accbox" style="transition-duration: 0.2s; border-style: dotted; border-color: black; border-radius: 5px; border-width: 1px; height: 0px; width: 0px; position: absolute; top: 30px; left: 87%; background-color: white;">
 <h5 style="margin-top: 10px; text-align: center;" id="name" hidden>Name</h5>
 <div id="gsignin" hidden style="margin-left: 25px; margin-top: 50px;" class="g-signin2" data-onsuccess="onSignIn"></div>
 
 </div>
 <div style="margin-top: 15px;">
-<button title="Undo" value="<-" onclick="un()"><img src="https://hypercreeper.github.io/Mountpad/undo.png"></button>
-<button title="Redo" value="->" onclick="re()"><img src="https://hypercreeper.github.io/Mountpad/redo.png"></button>
+<button title="Undo" value="<-" onclick="un()"><img src="undo.png"></button>
+<button title="Redo" value="->" onclick="re()"><img src="redo.png"></button>
 │
 <button title="Bold" value="B" onclick="b()">
-	<img src="https://hypercreeper.github.io/Mountpad/bold.png">
+	<img src="bold.png">
 </button>
 <button title="Underline" value="U" onclick="u()">
-	<img src="https://hypercreeper.github.io/Mountpad/underline.png">
+	<img src="underline.png">
 </button>
 <button title="Italic" value="I" onclick="i()">
-	<img src="https://hypercreeper.github.io/Mountpad/italic.png">
+	<img src="italic.png">
 </button>
 <button title="Strikethrough" value="S" onclick="s()">
-	<img src="https://hypercreeper.github.io/Mountpad/strikethrough.png">
+	<img src="strikethrough.png">
 </button>
 │
 <button title="Justify Left" value="" onclick="jl()">
-<img src="https://raw.githubusercontent.com/hypercreeper/Mountpad/main/right.png"></button>
+<img src="right.png"></button>
 <button title="Justify Center" value="" onclick="jc()">
-<img src="https://raw.githubusercontent.com/hypercreeper/Mountpad/main/center.png"></button>
+<img src="center.png"></button>
 <button title="Justify Full" value="" onclick="jf()">
-<img src="https://raw.githubusercontent.com/hypercreeper/Mountpad/main/full.png"></button>
+<img src="full.png"></button>
 <button title="Justify Right" value="" onclick="jr()">
-<img src="https://raw.githubusercontent.com/hypercreeper/Mountpad/main/left.png"></button>
+<img src="left.png"></button>
 │
 <button title="Decrease font Size" value="A-" onclick="sm()">
-<img src="https://hypercreeper.github.io/Mountpad/font_down.png"></button>
-<button title="font Size" value="A" onclick="si()"><img src="https://hypercreeper.github.io/Mountpad/font_size.png"></button>
-<button title="Increase font Size" value="A+" onclick="sp()"><img src="https://hypercreeper.github.io/Mountpad/font_up.png"></button>
-<button title="Font name" value="F" onclick="fn()"><img src="https://hypercreeper.github.io/Mountpad/font.png"></button>
+<img src="font_down.png"></button>
+<button title="font Size" value="A" onclick="si()"><img src="font_size.png"></button>
+<button title="Increase font Size" value="A+" onclick="sp()"><img src="font_up.png"></button>
+<button title="Font name" value="F" onclick="fn()"><img src="font.png"></button>
+<button id="startconversion" hidden></button>
+<button id="startconversiontwo" hidden></button>
 
-<button type="color" title="Choose Text Color" id="tcbtn" onclick="document.getElementById('tc').click();"><img src="https://hypercreeper.github.io/Mountpad/text_color.png"></button>
-<input type="color" title="Choose Text Color" value="#000000" id="tc" onchange="tc(event)" hidden>
+<button title="Choose Text Color" id="tcbtn" onclick="document.getElementById('tc').click();"><img id="tcimg" src="text_color.png"></button>
+<input type="color" title="Choose Text Color" value="#000000" id="tc" onkeydown="tc(event)" onclick="tc(event)" onchange="tc(event)" hidden>
 
-<button type="color" title="Choose Highlight Color" id="hcbtn" onclick="document.getElementById('hc').click();"><img src="https://hypercreeper.github.io/Mountpad/bg_color.png"></button>
-<input type="color" title="Choose Highlight Color" value="#ffffff" id="hc" onchange="hc(event)" hidden>
-<button title="Clear Formatting" value="C" onclick="cl(event)" style="background-color: red;"><img src="https://hypercreeper.github.io/Mountpad/clear.png"></button>
+<button title="Choose Highlight Color" id="hcbtn" onclick="document.getElementById('hc').click();"><img id="hcimg" src="bg_color.png"></button>
+<input type="color" title="Choose Highlight Color" value="#ffffff" id="hc" onkeydown="hc(event)" onclick="hc(event)" onchange="hc(event)" hidden>
+
+<button title="Clear Formatting" value="C" onclick="cl(event)" style="background-color: red;"><img src="clear.png"></button>
 │
-<button title="Bullet Point" value="* " onclick="bp()"><img src="https://raw.githubusercontent.com/hypercreeper/Mountpad/main/bullets.png"></button>
-<button title="Number Bullet Point" value="1." onclick="nbp()"><img src="https://raw.githubusercontent.com/hypercreeper/Mountpad/main/number_bullets.png"></button>
+<button title="Bullet Point" value="* " onclick="bp()"><img src="bullets.png"></button>
+<button title="Number Bullet Point" value="1." onclick="nbp()"><img src="number_bullets.png"></button>
 │
-<button title="Insert image" value="Im" onclick="ii()"><img src="https://hypercreeper.github.io/Mountpad/insert_pic.png"></button>
-<button title="Insert HTML" value="</>" onclick="inhtml()"><img src="https://hypercreeper.github.io/Mountpad/code.png"></button>
-<button title="Insert YouTube video" value="YTv" onclick="invid()"><img src="https://hypercreeper.github.io/Mountpad/YT_Logo.png"></button>
-<button title="Insert File" value="iFi" onclick="infile()"><img src="https://hypercreeper.github.io/Mountpad/file.png"></button>│<button title="Print" value="Print" onclick="printDiv('divy')"><img src="https://raw.githubusercontent.com/hypercreeper/Mountpad/main/print.png"></button>
+<button title="Insert image" value="Im" onclick="ii()"><img src="insert_pic.png"></button>
+<button title="Insert HTML" value="</>" onclick="inhtml()"><img src="code.png"></button>
+<button title="Insert YouTube video" value="YTv" onclick="invid()"><img src="YT_Logo.png"></button>
+<input type="file" onchange="uploadFile(this.files[0]);" id="fileuploader" hidden>
+<button title="Insert File" value="iFi" onclick="document.getElementById('fileuploader').click();"><img src="file.png"></button>│<button title="Print" value="Print" onclick="printDiv('divy')"><img src="print.png"></button>
 </div>
 <div style="position: absolute; top: 1px; left: 2px;">
-<img src="https://hypercreeper.github.io/Mountpad/icon.png" style="height: 50px; width: 50px; position: absolute;">
+<img src="icon.png" style="height: 50px; width: 50px; position: absolute;">
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 <input id="tf" placeholder="enter file name here" onclick="this.select();" class="filename" title="File Name" value="New Document" style="width: 177px; height: 31px; border-style: solid; border-width: 1px; border-color: black; border-radius: 5px;">
 &nbsp;
-<button value="save" class="save" onclick="savetext('.mdocx')" title="Save File"><img src="https://raw.githubusercontent.com/hypercreeper/Mountpad/main/save.png">Save as .mdocx</button>
+<button value="save" class="save" onclick="savetext('.mdocx')" title="Save File"><img src="save.png">Save as .mdocx</button>
 &nbsp;
-<button value="save" class="save" onclick="savetext('.html')" title="Save File"><img src="https://raw.githubusercontent.com/hypercreeper/Mountpad/main/save.png">Save as .html</button>
+<button value="save" class="save" onclick="savetext('.html')" title="Save File"><img src="save.png">Save as .html</button>
 &nbsp;
-<button value="save" id="onlinesavebtn" disabled class="save" onclick="savetofirebase()" title="Save File Online"><img src="https://raw.githubusercontent.com/hypercreeper/Mountpad/main/add_to_drive.png"> Save Online</button>
+<button value="save" id="onlinesavebtn" disabled class="save" onclick="savetofirebase()" title="Save File Online"><img src="add_to_drive.png" id="stfi" style="width: 24px; height: 24px;"> Save Online</button>
 &nbsp;
 │
 &nbsp;
 <input type="file" id="ff" onchange="openfile(document.getElementById('ff').files[0])" accept=".mdocx" hidden>
 <button value="open" class="save" onclick="document.getElementById('ff').click();" title="Open File">
-<img src="https://raw.githubusercontent.com/hypercreeper/Mountpad/main/open.png"> Open from Local</button>
+<img src="open.png"> Open from Local</button>
 &nbsp;
 <button value="open" style="width: 148px;" class="save" disabled  id="onlineuploadbtn" onclick="executerud(); document.getElementById('file-picker-window').hidden = false;" title="Open File">
-<img src="https://raw.githubusercontent.com/hypercreeper/Mountpad/main/open.png"> Open from Online</button>
+<img src="open.png"> Open from Online</button>
 </div>
 </div>
 <div id="window" style="position: fixed; background-color: white; border-radius: 5px; border-style: solid; border-color: black; border-width: 2px;" hidden></div>
@@ -395,11 +1083,25 @@ var s;
 <hr>
 <div id="files"></div>
 </div>
-<div id="message-window" style="position: fixed; top: 35%; left: 37%; height: 200px; width: 350px; background-color: white; border-radius: 5px; border-style: solid; border-color: black; border-width: 2px;" >
+<div id="message-window" style="position: fixed; top: 20%; left: 20%; height: 400px; width: 800px; background-color: white; border-radius: 5px; border-style: solid; border-color: black; border-width: 2px;" >
 <a onclick="document.getElementById('message-window').hidden = true;" style="color: red; cursor: pointer;"><p style="text-align: right;">X</p></a>
-<h4 style="text-align: center; margin-top: -25px;">Share this page</h4>
-<p style="width: 300px;">#spreadtheword with everyone you know. <img style="float: right; margin-bottom: -20px;" src="https://raw.githubusercontent.com/hypercreeper/Mountpad/main/Share.png"></img><br>My goal is to reach 10,000 users by the end of this year!</p><br>
-<input id="code" readonly style="border-style: solid; border-width: 1px; width: 270px;" value="https://hypercreeper.github.io/Mountpad"><button style="height: auto; width: auto; margin-left: 10px;" onclick="copythelink()">Copy</button>
+<h4 style="text-align: center; margin-top: -25px;">News</h4>
+<img src="Loading.gif" id="NewsLoading" style="position: absolute; left: 43%; top: 30%;">
+<table style="border-style:'solid'; border-color: black;">
+<tr>
+<td id="field1">
+</td>
+<td id="field2">
+</td>
+</tr>
+<tr>
+<td id="field3">
+</td>
+<td id="field4">
+</td>
+</tr>
+</table>
+<p id="version"></p>
 <script>
 function copythelink() {
 code.select();
@@ -423,18 +1125,13 @@ min-height: 80%;
 </div>
 
 <script>
+var File;
 var GName;
 var GEmail;
 var Gpfp;
 var GID;
 function onSignIn(googleUser) {
   var profile = googleUser.getBasicProfile();
-  console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-  console.log('Name: ' + profile.getName());
-  document.getElementById("name").innerHTML = profile.getName();
-  document.getElementById("pfpimage").src = profile.getImageUrl();
-  console.log('Image URL: ' + profile.getImageUrl());
-  console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
   GName = profile.getName();
   GEmail = profile.getEmail();
   Gpfp = profile.getImageUrl();
@@ -450,10 +1147,10 @@ function savetofirebase() {
   // Import the functions you need from the SDKs you need
   import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.7/firebase-app.js";
   import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.7/firebase-analytics.js";
-  import { getDatabase, ref, set, child, get } from "https://www.gstatic.com/firebasejs/9.6.7/firebase-database.js";
+  import { getDatabase, connectDatabaseEmulator, ref, set, child, get } from "https://www.gstatic.com/firebasejs/9.6.7/firebase-database.js";
+  import { getRemoteConfig, getValue, fetchAndActivate } from "https://www.gstatic.com/firebasejs/9.6.7/firebase-remote-config.js";
   // TODO: Add SDKs for Firebase products that you want to use
   // https://firebase.google.com/docs/web/setup#available-libraries
-
   // Your web app's Firebase configuration
   // For Firebase JS SDK v7.20.0 and later, measurementId is optional
   const firebaseConfig = {
@@ -471,11 +1168,37 @@ function savetofirebase() {
   const app = initializeApp(firebaseConfig);
   const analytics = getAnalytics(app);
   const database = getDatabase(app);
+	//connectDatabaseEmulator(database, "localhost", 9000);
+	
+		const newsRef = ref(getDatabase());
+		var pullednews;
+		get(child(newsRef, "/private")).then((snapshot) => {
+			if (snapshot.exists()) {
+			console.log("Database Read");
+			console.log(snapshot.val());
+			pullednews = snapshot.val();
+		  document.getElementById("field1").innerHTML = pullednews.Field1
+			document.getElementById("field2").innerHTML = pullednews.Field2
+			document.getElementById("field3").innerHTML = pullednews.Field3
+			document.getElementById("field4").innerHTML = pullednews.Field4
+			document.getElementById("version").innerHTML = "Version " + pullednews.Version;
+			document.getElementById("NewsLoading").hidden = true;
+			} else {
+			document.getElementById("NewsLoading").src = "error.png";
+			console.warn("No data available");
+			}
+		}).catch((error) => {
+			document.getElementById("NewsLoading").src = "error.png";
+			console.error(error);
+		});
+	
+  
   var documentcount = 1;
   function executewud(userId, name, email, documentData) {
 	  
   }
   function writeUserData(userId, name, email, documentData) {
+		document.getElementById("stfi").src = "Loading.gif";
 	  const db = database;
 	  var currentpath = {};
 	  var currentrootpath = {};
@@ -552,6 +1275,7 @@ get(child(dbRef, "/" + userId + "/Documents")).then((snapshot) => {
 			  ...newpath
 		  }
 	  set(ref(db, "/"), newnewpath);
+		document.getElementById("stfi").src = "add_to_drive.png";
 	  document.getElementById("onlinesavebtn").style.backgroundColor = "#00ff00";
 	  setTimeout(function() {document.getElementById("onlinesavebtn").style.backgroundColor = ""}, 1000);
     }, 2000);
