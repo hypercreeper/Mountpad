@@ -1136,6 +1136,8 @@ function onSignIn(googleUser) {
   GEmail = profile.getEmail();
   Gpfp = profile.getImageUrl();
   GID = profile.getId();
+	document.getElementById("pfpimage").src = profile.getImageUrl();
+	document.getElementById("name").textContent = profile.getName();
   document.getElementById("onlinesavebtn").disabled = false;
   document.getElementById("onlineuploadbtn").disabled = false;
 }
